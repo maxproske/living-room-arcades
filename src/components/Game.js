@@ -17,8 +17,18 @@ const StyledGameWrapper = styled.div`
 export const Game = () => {
   const [map, setMap] = useMap()
 
+  const handleKeyDown = () => {}
+
+  const handleKeyUp = () => {}
+
+  // Note: Without the role attribute, you would have to click the map for inputs to register
   return (
-    <StyledGameWrapper>
+    <StyledGameWrapper
+      role="button"
+      tabIndex="0"
+      onKeyDown={handleKeyDown}
+      onKeyUp={handleKeyUp}
+    >
       <Map map={map} />
     </StyledGameWrapper>
   )

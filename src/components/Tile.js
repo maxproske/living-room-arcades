@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 
-import tiles from '../assets/tiles.png'
+import tiles from '../assets/basic.png'
 
-const StyledTileWrapper = styled.div`
+const StyledTile = styled.div`
   background-color: rgba(255, 100, 100, 0.5);
 
   transition: 0.25s;
@@ -14,7 +14,7 @@ const StyledTileWrapper = styled.div`
   }
 `
 
-const StyledTile = styled.div`
+const StyledTileTexture = styled.div`
   width: 100%;
   height: 100%;
 
@@ -29,10 +29,17 @@ const StyledTile = styled.div`
   transform: rotateZ(-45deg) rotateY(-60deg) scale(3);
 `
 
-export const Tile = () => {
+// Note: memo prevents React from re-rendering tile every frame
+export const Tile = memo(({ xPos, yPos }) => {
+  console.log(`rendered tile ${xPos},${yPos}`)
+
+  const handleClick = () => {
+    console.log(`clicked ${xPos},${yPos}`)
+  }
+
   return (
-    <StyledTileWrapper>
-      <StyledTile atlasIndex={Math.floor(Math.random() * 3)} />
-    </StyledTileWrapper>
+    <StyledTile onClick={handleClick}>
+      <StyledTileTexture atlasIndex={Math.floor(Math.random() * 3)} />
+    </StyledTile>
   )
-}
+})

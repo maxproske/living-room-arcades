@@ -2,11 +2,22 @@ import { useState, useEffect } from 'react'
 
 import { createMap } from '../utils/gameHelpers'
 
-export const useMap = () => {
-  const [map, setMap] = useState(createMap())
+export const useMap = (file, items) => {
+  const [map, setMap] = useState(null)
+
+  // Initialize map
+  useEffect(() => {
+    const fetchMap = async () => {
+      const mapUpdate = await createMap(file)
+      setMap(mapUpdate)
+    }
+
+    fetchMap()
+  }, [file])
 
   useEffect(() => {
-    console.log('useMap useEffect ran')
+    // Will infinite loop unless we invoke useCallback
+    // setMap((prev) => updateMap(prev))
   }, [])
 
   return [map, setMap]

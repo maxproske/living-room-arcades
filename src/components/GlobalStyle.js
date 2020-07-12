@@ -8,9 +8,11 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
   }
 
-  /* Include padding and border in all elements' total width and height. */
   html {
+    /* Include padding and border in all elements' total width and height. */
     box-sizing: border-box;
+
+    background-color: black;
   }
 
   *,

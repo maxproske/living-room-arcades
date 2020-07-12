@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 // Components
@@ -11,19 +11,19 @@ import { useMap } from '../hooks/useMap'
 import { useGameStatus } from '../hooks/useGameStatus'
 
 // Placeholder level
-import file from '../maps/level1.txt'
+import level1 from '../maps/level1.txt'
+import level1TextureIndex from '../assets/basic-index.txt'
 
 const StyledGameWrapper = styled.div`
   width: 100vw;
   height: 100vh;
-  background-color: black;
   overflow: hidden;
 `
 
 export const Game = () => {
   const [frames, tick] = useGameStatus()
   const [items, setItems] = useItems()
-  const [map, setMap] = useMap(file, items)
+  const [map, setMap, textureIndex] = useMap(level1, level1TextureIndex, items)
 
   const handleKeyDown = () => {}
 
@@ -44,7 +44,7 @@ export const Game = () => {
       onKeyDown={handleKeyDown}
       onKeyUp={handleKeyUp}
     >
-      <Map map={map} />
+      <Map map={map} textureIndex={textureIndex} />
     </StyledGameWrapper>
   )
 }

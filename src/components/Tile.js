@@ -23,23 +23,25 @@ const StyledTileTexture = styled.div`
   background: url(${tiles});
   background-position: calc(${({ atlasIndex }) => atlasIndex * 64 * -1}px) -16px;
   background-repeat: no-repeat;
-  background-size: 300% 100%;
+  background-size: 700% 100%;
   image-rendering: pixelated;
 
   transform: rotateZ(-45deg) rotateY(-60deg) scale(3);
 `
 
 // Note: memo prevents React from re-rendering tile every frame
-export const Tile = memo(({ xPos, yPos }) => {
+export const Tile = memo(({ textureIndex, tile, xPos, yPos }) => {
   console.log(`rendered tile ${xPos},${yPos}`)
 
   const handleClick = () => {
-    console.log(`clicked ${xPos},${yPos}`)
+    console.log(`clicked a ${tile.name} tile at ${xPos},${yPos}.`)
   }
 
   return (
     <StyledTile onClick={handleClick}>
-      <StyledTileTexture atlasIndex={Math.floor(Math.random() * 3)} />
+      {tile.name !== 'blank' && (
+        <StyledTileTexture atlasIndex={Math.floor(Math.random() * 3)} />
+      )}
     </StyledTile>
   )
 })

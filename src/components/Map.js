@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { Tile } from './Tile'
@@ -22,13 +22,15 @@ const StyledMap = styled.div`
   height: ${({ cols }) => cols * 64}px;
 `
 
-export const Map = ({ map }) => {
+export const Map = ({ map, textureIndex }) => {
   return (
     map && (
       <StyledMapWrapper>
         <StyledMap rows={map.length} cols={map[0].length}>
           {map.map((row, y) =>
-            row.map((tile, x) => <Tile xPos={x} yPos={y} key={`${x},${y}`} />)
+            row.map((tile, x) => (
+              <Tile tile={tile} xPos={x} yPos={y} key={`${x},${y}`} />
+            ))
           )}
         </StyledMap>
       </StyledMapWrapper>

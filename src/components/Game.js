@@ -9,11 +9,15 @@ import { useInterval } from '../hooks/useInterval'
 import { useEntities } from '../hooks/useEntities'
 import { useMap } from '../hooks/useMap'
 import { useGameStatus } from '../hooks/useGameStatus'
+import { usePlayer } from '../hooks/usePlayer'
 
 // Placeholder level
 import level1 from '../maps/level1.txt'
 import level1Entities from '../maps/entities.json'
-import level1TextureIndex from '../assets/basic-index.txt'
+import level1TextureFile from '../assets/basic-index.txt'
+
+// Placeholder player
+import playerTextureFile from '../assets/player-index.txt'
 
 const StyledGameWrapper = styled.div`
   width: 100vw;
@@ -24,10 +28,12 @@ const StyledGameWrapper = styled.div`
 export const Game = () => {
   const [frames, tick] = useGameStatus()
   const [entities, setEntities] = useEntities(level1Entities)
-  const [map, setMap, textureIndex] = useMap(
+  const [player, setPlayer, playerTextureIndex] = usePlayer(playerTextureFile)
+  const [map, setMap, mapTextureIndex] = useMap(
     level1,
-    level1TextureIndex,
-    entities
+    level1TextureFile,
+    entities,
+    player
   )
 
   const handleKeyDown = () => {}
@@ -37,7 +43,7 @@ export const Game = () => {
   // Game loop
   useInterval(() => {
     tick()
-  }, 100)
+  }, 1000)
 
   console.log(`rendering frame ${frames}`)
 
@@ -49,7 +55,11 @@ export const Game = () => {
       onKeyDown={handleKeyDown}
       onKeyUp={handleKeyUp}
     >
-      <Map map={map} textureIndex={textureIndex} />
+      <Map
+        map={map}
+        mapTextureIndex={mapTextureIndex}
+        playerTextureIndex={playerTextureIndex}
+      />
     </StyledGameWrapper>
   )
 }

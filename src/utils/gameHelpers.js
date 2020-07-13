@@ -4,7 +4,7 @@ const tiles = {
   wall: '#',
 }
 
-export const createMap = async (file, entities) => {
+export const createMap = async (file, entities, player) => {
   const level = await fetch(file).then((response) => response.text())
 
   // Split multiline string into an array of lines
@@ -59,19 +59,19 @@ export const createMap = async (file, entities) => {
       map[y][x] = {
         symbol: tile,
         entities: [],
+        players: [],
       }
     }
   }
 
   // Append entities
   entities.forEach((entity) => {
-    console.log('entity.y', entity.y)
-    console.log('entity.x', entity.x)
-    console.log('map[entity.y][entity.x]', map[entity.y][entity.x])
     map[entity.y][entity.x].entities.push(entity.symbol)
   })
 
-  console.log(map)
+  // Append player
+  map[player.y][player.x].players.push(player.symbol)
+
   return map
 }
 
@@ -89,6 +89,7 @@ export const createTextureIndex = async (file) => {
 
     textureIndex[symbol] = []
     for (let i = 0; i < numVariations; i++) {
+      // Assumes 64x64 textures
       const pos = {
         xPos: x * 64,
         yPos: y * 64,
@@ -109,4 +110,39 @@ export const createTextureIndex = async (file) => {
 
 export const createEntities = (entities) => {
   return entities
+}
+
+export const createPlayer = async () => {
+  const player = {
+    symbol: 'p',
+    x: 2,
+    y: 2,
+  }
+  return player
+}
+
+export const createPlayerTextureIndex = async (file) => {
+  let textureIndex = []
+
+  const atlas = await fetch(file).then((response) => response.text())
+
+  // Split multiline string into an array of lines
+  const lines = atlas.split(/\r?\n/)
+  lines.forEach((line) => {
+    const direction = line.charAt(0) // Get first character from the string
+    const directionData = line.substr(2).split(',')
+    let [x, y, numAnimations] = directionData
+
+    textureIndex[direction] = []
+    for (let i = 0; i < numAnimations; i++) {
+      // Assumes 43x70 textures
+      const pos = {
+        xPos: x * 43,
+        yPos: y * 70,
+      }
+      textureIndex[direction].push(pos)
+    }
+  })
+
+  return textureIndex
 }

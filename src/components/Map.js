@@ -22,25 +22,24 @@ const StyledMap = styled.div`
   height: ${({ cols }) => cols * 64}px;
 `
 
-export const Map = memo(({ map, textureIndex }) => {
+export const Map = memo(({ map, mapTextureIndex, playerTextureIndex }) => {
+  console.log({ map, mapTextureIndex, playerTextureIndex })
   return (
     map &&
-    textureIndex && (
+    mapTextureIndex &&
+    playerTextureIndex && (
       <StyledMapWrapper>
         <StyledMap rows={map.length} cols={map[0].length}>
           {map.map((row, y) =>
             row.map((tile, x) => {
-              console.log(
-                'textureIndex[tile.symbol]',
-                textureIndex[tile.symbol]
-              )
-
-              // TODO: Store textureIndex in state instead of prop drilling
+              // TODO: Store mapTextureIndex in state instead of prop drilling
               return (
                 <Tile
-                  textureIndex={textureIndex}
+                  mapTextureIndex={mapTextureIndex}
+                  playerTextureIndex={playerTextureIndex}
                   symbol={tile.symbol}
                   entities={tile.entities}
+                  players={tile.players}
                   xPos={x}
                   yPos={y}
                   key={`${x},${y}`}

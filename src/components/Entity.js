@@ -31,16 +31,16 @@ const StyledEntityTexture = styled.div`
   transform: rotateZ(-45deg) rotateY(-60deg) scale(3);
 `
 
-export const Entity = ({ textureIndex, symbol }) => {
+export const Entity = ({ mapTextureIndex, symbol }) => {
   const [texturePos, setTexturePos] = useState(null)
 
   // Get background position for texture
   useEffect(() => {
-    if (textureIndex[symbol]) {
+    if (mapTextureIndex[symbol]) {
       // Get random texture variation
       const entityTexture =
-        textureIndex[symbol][
-          Math.floor(Math.random() * textureIndex[symbol].length)
+        mapTextureIndex[symbol][
+          Math.floor(Math.random() * mapTextureIndex[symbol].length)
         ]
       const texturePosUpdate = {
         xPos: entityTexture.xPos,
@@ -49,7 +49,7 @@ export const Entity = ({ textureIndex, symbol }) => {
 
       setTexturePos(texturePosUpdate)
     }
-  }, [textureIndex, symbol])
+  }, [mapTextureIndex, symbol])
 
   return (
     <StyledEntity>

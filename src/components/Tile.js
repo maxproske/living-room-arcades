@@ -1,7 +1,9 @@
 import React, { useState, useEffect, memo } from 'react'
 import styled from 'styled-components'
 
+// Components
 import { Entity } from './Entity'
+import { Player } from './Player'
 
 import tiles from '../assets/basic.png'
 
@@ -39,55 +41,69 @@ const StyledTileTexture = styled.div`
 `
 
 // Note: memo prevents React from re-rendering tile every frame
-export const Tile = memo(({ textureIndex, symbol, entities, xPos, yPos }) => {
-  const [texturePos, setTexturePos] = useState(null)
+export const Tile = memo(
+  ({
+    mapTextureIndex,
+    playerTextureIndex,
+    symbol,
+    entities,
+    players,
+    xPos,
+    yPos,
+  }) => {
+    const [texturePos, setTexturePos] = useState(null)
 
-  useEffect(() => {
-    if (entities && entities.length > 0) {
-      console.log(`found entities at (${xPos},${yPos})`)
-    }
-  }, [entities, xPos, yPos])
+    useEffect(() => {
+      if (entities && entities.length > 0) {
+        console.log(`found entities at (${xPos},${yPos})`)
+      }
+    }, [entities, xPos, yPos])
 
-  // Get background position for texture
-  useEffect(() => {
-    if (textureIndex[symbol]) {
-      // Handle blank tiles
-      if (textureIndex[symbol].length === 0) {
+    // Get background position for texture
+    useEffect(() => {
+      if (mapTextureIndex[symbol]) {
+        // Handle blank tiles
+        if (mapTextureIndex[symbol].length === 0) {
+          const texturePosUpdate = {
+            xPos: 0,
+            yPos: 0,
+          }
+
+          setTexturePos(texturePosUpdate)
+          return
+        }
+
+        // Get random texture variation
+        const tileTexture =
+          mapTextureIndex[symbol][
+            Math.floor(Math.random() * mapTextureIndex[symbol].length)
+          ]
         const texturePosUpdate = {
-          xPos: 0,
-          yPos: 0,
+          xPos: tileTexture.xPos,
+          yPos: tileTexture.yPos,
         }
 
         setTexturePos(texturePosUpdate)
         return
       }
+    }, [symbol, mapTextureIndex])
 
-      // Get random texture variation
-      const tileTexture =
-        textureIndex[symbol][
-          Math.floor(Math.random() * textureIndex[symbol].length)
-        ]
-      const texturePosUpdate = {
-        xPos: tileTexture.xPos,
-        yPos: tileTexture.yPos,
-      }
-
-      setTexturePos(texturePosUpdate)
-      return
+    const handleClick = () => {
+      console.log(`clicked a tile at (${xPos},${yPos})`)
     }
-  }, [symbol, textureIndex])
 
-  const handleClick = () => {
-    console.log(`clicked a tile at (${xPos},${yPos})`)
+    return (
+      <StyledTile onClick={handleClick}>
+        {players &&
+          players.map((symbol) => (
+            <Player playerTextureIndex={playerTextureIndex} symbol={symbol} />
+          ))}
+        {entities &&
+          entities.map((symbol) => (
+            <Entity mapTextureIndex={mapTextureIndex} symbol={symbol} />
+          ))}
+        {texturePos && <StyledTileTexture texturePos={texturePos} />}
+      </StyledTile>
+    )
   }
-
-  return (
-    <StyledTile onClick={handleClick}>
-      {entities &&
-        entities.map((symbol) => (
-          <Entity textureIndex={textureIndex} symbol={symbol} />
-        ))}
-      {texturePos && <StyledTileTexture texturePos={texturePos} />}
-    </StyledTile>
-  )
-})
+)

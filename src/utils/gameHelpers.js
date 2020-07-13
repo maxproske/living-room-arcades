@@ -4,7 +4,7 @@ const tiles = {
   wall: '#',
 }
 
-export const createMap = async (file) => {
+export const createMap = async (file, entities) => {
   const level = await fetch(file).then((response) => response.text())
 
   // Split multiline string into an array of lines
@@ -24,6 +24,7 @@ export const createMap = async (file) => {
     new Array(longestRow).fill(tiles.blank)
   )
 
+  // Set textures
   for (let y = 0; y < levelLines.length; y++) {
     const line = levelLines[y]
 
@@ -54,15 +55,25 @@ export const createMap = async (file) => {
           tile = tiles.blank
           break
       }
-      map[y][x] = tile
+
+      map[y][x] = {
+        symbol: tile,
+        entities: [],
+      }
     }
   }
+
+  // Append entities
+  entities.forEach((entity) => {
+    console.log('entity.y', entity.y)
+    console.log('entity.x', entity.x)
+    console.log('map[entity.y][entity.x]', map[entity.y][entity.x])
+    map[entity.y][entity.x].entities.push(entity.symbol)
+  })
 
   console.log(map)
   return map
 }
-
-export const createItems = () => {}
 
 export const createTextureIndex = async (file) => {
   let textureIndex = []
@@ -94,4 +105,8 @@ export const createTextureIndex = async (file) => {
   })
 
   return textureIndex
+}
+
+export const createEntities = (entities) => {
+  return entities
 }

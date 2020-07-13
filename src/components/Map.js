@@ -30,9 +30,17 @@ export const Map = memo(({ map, textureIndex }) => {
         <StyledMap rows={map.length} cols={map[0].length}>
           {map.map((row, y) =>
             row.map((tile, x) => {
+              console.log(
+                'textureIndex[tile.symbol]',
+                textureIndex[tile.symbol]
+              )
+
+              // TODO: Store textureIndex in state instead of prop drilling
               return (
                 <Tile
-                  tileTextures={textureIndex[tile]}
+                  textureIndex={textureIndex}
+                  symbol={tile.symbol}
+                  entities={tile.entities}
                   xPos={x}
                   yPos={y}
                   key={`${x},${y}`}

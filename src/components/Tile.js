@@ -1,12 +1,15 @@
 import React, { useState, useEffect, memo } from 'react'
 import styled from 'styled-components'
 
+import { Entity } from './Entity'
+
 import tiles from '../assets/basic.png'
 
 const StyledTile = styled.div`
-  background-color: rgba(255, 100, 100, 0.5);
+  background-color: rgba(255, 100, 100, 0);
 
   transition: 0.15s;
+  position: relative; /* Allow entities and textures to stack */
 
   &:hover {
     filter: brightness(1.2);
@@ -17,13 +20,16 @@ const StyledTile = styled.div`
 const StyledTileTexture = styled.div`
   width: 100%;
   height: 100%;
+  position: absolute;
 
-  pointer-events: none; /* Hover grid items, not 96x96 child */
+  z-index: 1;
+
+  pointer-events: none; /* Hover grid entities, not 96x96 child */
 
   background: url(${tiles});
   background-position: -${({ texturePos }) => texturePos.xPos}px ${({ texturePos }) => texturePos.yPos}px;
   background-repeat: no-repeat;
-  background-size: 800% 100%;
+  background-size: 1000% 100%;
   image-rendering: pixelated;
   position: relative;
   top: -32px;
@@ -33,14 +39,20 @@ const StyledTileTexture = styled.div`
 `
 
 // Note: memo prevents React from re-rendering tile every frame
-export const Tile = memo(({ tileTextures, xPos, yPos }) => {
+export const Tile = memo(({ textureIndex, symbol, entities, xPos, yPos }) => {
   const [texturePos, setTexturePos] = useState(null)
+
+  useEffect(() => {
+    if (entities && entities.length > 0) {
+      console.log(`found entities at (${xPos},${yPos})`)
+    }
+  }, [entities, xPos, yPos])
 
   // Get background position for texture
   useEffect(() => {
-    if (tileTextures) {
+    if (textureIndex[symbol]) {
       // Handle blank tiles
-      if (tileTextures.length === 0) {
+      if (textureIndex[symbol].length === 0) {
         const texturePosUpdate = {
           xPos: 0,
           yPos: 0,
@@ -52,7 +64,9 @@ export const Tile = memo(({ tileTextures, xPos, yPos }) => {
 
       // Get random texture variation
       const tileTexture =
-        tileTextures[Math.floor(Math.random() * tileTextures.length)]
+        textureIndex[symbol][
+          Math.floor(Math.random() * textureIndex[symbol].length)
+        ]
       const texturePosUpdate = {
         xPos: tileTexture.xPos,
         yPos: tileTexture.yPos,
@@ -61,7 +75,7 @@ export const Tile = memo(({ tileTextures, xPos, yPos }) => {
       setTexturePos(texturePosUpdate)
       return
     }
-  }, [tileTextures])
+  }, [symbol, textureIndex])
 
   const handleClick = () => {
     console.log(`clicked a tile at (${xPos},${yPos})`)
@@ -69,6 +83,10 @@ export const Tile = memo(({ tileTextures, xPos, yPos }) => {
 
   return (
     <StyledTile onClick={handleClick}>
+      {entities &&
+        entities.map((symbol) => (
+          <Entity textureIndex={textureIndex} symbol={symbol} />
+        ))}
       {texturePos && <StyledTileTexture texturePos={texturePos} />}
     </StyledTile>
   )

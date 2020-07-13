@@ -1,13 +1,7 @@
 const tiles = {
-  blank: {
-    name: 'blank',
-  },
-  dirtFloor: {
-    name: 'dirt floor',
-  },
-  wall: {
-    name: 'wall',
-  },
+  blank: '0',
+  dirtFloor: '.',
+  wall: '#',
 }
 
 export const createMap = async (file) => {
@@ -76,8 +70,8 @@ export const createTextureIndex = async (file) => {
   const atlas = await fetch(file).then((response) => response.text())
 
   // Split multiline string into an array of lines
-  const atlasLines = atlas.split(/\r?\n/)
-  atlasLines.forEach((line) => {
+  const lines = atlas.split(/\r?\n/)
+  lines.forEach((line) => {
     const symbol = line.charAt(0) // Get first character from the string
     const symbolData = line.substr(2).split(',')
     let [x, y, numVariations] = symbolData
@@ -99,6 +93,5 @@ export const createTextureIndex = async (file) => {
     }
   })
 
-  console.log('textureIndex', textureIndex)
   return textureIndex
 }

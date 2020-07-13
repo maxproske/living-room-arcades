@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 import { createMap, createTextureIndex } from '../utils/gameHelpers'
 
-export const useMap = (mapFile, textureIndexFile, items) => {
+export const useMap = (mapFile, texturesFile) => {
   const [map, setMap] = useState(null)
   const [textureIndex, setTextureIndex] = useState(null)
 
@@ -14,13 +14,13 @@ export const useMap = (mapFile, textureIndexFile, items) => {
     }
 
     const fetchTextureIndex = async () => {
-      const textureIndexUpdate = await createTextureIndex(textureIndexFile)
+      const textureIndexUpdate = await createTextureIndex(texturesFile)
       setTextureIndex(textureIndexUpdate)
     }
 
     fetchMap()
     fetchTextureIndex()
-  }, [mapFile, textureIndexFile])
+  }, [mapFile, texturesFile])
 
   useEffect(() => {
     // Will infinite loop unless we invoke useCallback

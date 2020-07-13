@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import styled from 'styled-components'
 
 import tiles from '../assets/basic.png'
@@ -6,7 +6,7 @@ import tiles from '../assets/basic.png'
 const StyledTile = styled.div`
   background-color: rgba(255, 100, 100, 0.5);
 
-  transition: 0.25s;
+  transition: 0.15s;
 
   &:hover {
     filter: brightness(1.2);
@@ -21,27 +21,55 @@ const StyledTileTexture = styled.div`
   pointer-events: none; /* Hover grid items, not 96x96 child */
 
   background: url(${tiles});
-  background-position: calc(${({ atlasIndex }) => atlasIndex * 64 * -1}px) -16px;
+  background-position: -${({ texturePos }) => texturePos.xPos}px ${({ texturePos }) => texturePos.yPos}px;
   background-repeat: no-repeat;
-  background-size: 700% 100%;
+  background-size: 800% 100%;
   image-rendering: pixelated;
+  position: relative;
+  top: -32px;
+  left: -32px;
 
   transform: rotateZ(-45deg) rotateY(-60deg) scale(3);
 `
 
 // Note: memo prevents React from re-rendering tile every frame
-export const Tile = memo(({ textureIndex, tile, xPos, yPos }) => {
-  console.log(`rendered tile ${xPos},${yPos}`)
+export const Tile = memo(({ tileTextures, xPos, yPos }) => {
+  const [texturePos, setTexturePos] = useState(null)
+
+  // Get background position for texture
+  useEffect(() => {
+    if (tileTextures) {
+      // Handle blank tiles
+      if (tileTextures.length === 0) {
+        const texturePosUpdate = {
+          xPos: 0,
+          yPos: 0,
+        }
+
+        setTexturePos(texturePosUpdate)
+        return
+      }
+
+      // Get random texture variation
+      const tileTexture =
+        tileTextures[Math.floor(Math.random() * tileTextures.length)]
+      const texturePosUpdate = {
+        xPos: tileTexture.xPos,
+        yPos: tileTexture.yPos,
+      }
+
+      setTexturePos(texturePosUpdate)
+      return
+    }
+  }, [tileTextures])
 
   const handleClick = () => {
-    console.log(`clicked a ${tile.name} tile at ${xPos},${yPos}.`)
+    console.log(`clicked a tile at (${xPos},${yPos})`)
   }
 
   return (
     <StyledTile onClick={handleClick}>
-      {tile.name !== 'blank' && (
-        <StyledTileTexture atlasIndex={Math.floor(Math.random() * 3)} />
-      )}
+      {texturePos && <StyledTileTexture texturePos={texturePos} />}
     </StyledTile>
   )
 })

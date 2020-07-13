@@ -23,7 +23,7 @@ const StyledGameWrapper = styled.div`
 export const Game = () => {
   const [frames, tick] = useGameStatus()
   const [items, setItems] = useItems()
-  const [map, setMap, textureIndex] = useMap(level1, level1TextureIndex, items)
+  const [map, setMap, textureIndex] = useMap(level1, level1TextureIndex)
 
   const handleKeyDown = () => {}
 

@@ -33,15 +33,14 @@ const StyledTileTexture = styled.div`
   background: url(${tiles});
   background-position: -${({ texturePos }) => texturePos.xPos}px ${({ texturePos }) => texturePos.yPos}px;
   background-repeat: no-repeat;
-  background-size: 1000% 100%;
   image-rendering: pixelated;
   position: relative;
-  top: -32px;
-  left: -32px;
+  top: -50%;
+  left: -50%;
 
   z-index: ${({ texturePos }) => texturePos.xPos + texturePos.y + 1};
 
-  transform: rotateZ(-45deg) rotateY(-60deg) scale(3);
+  transform: rotateZ(-45deg) rotateY(-60deg) scale(2.9);
 
   ${({ isInPlayerPath }) => isInPlayerPath && `filter: brightness(0.5);`}
 `

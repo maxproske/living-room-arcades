@@ -28,7 +28,7 @@ const StyledEntityTexture = styled.div`
   top: -32px;
   left: -32px;
 
-  transform: rotateZ(-45deg) rotateY(-60deg) scale(3);
+  transform: rotateZ(-45deg) rotateY(-60deg) scale(2.9);
 `
 
 export const Entity = ({ mapTextureIndex, symbol }) => {

@@ -1,35 +1,74 @@
 import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
+import styled, { keyframes, css } from 'styled-components'
 
 import sprites from '../assets/player.png'
+
+const walkAnimations = {
+  SE: keyframes`
+  0% {
+    left: 0%;
+  }
+  100% {
+    left: 100%;
+  }`,
+  NE: keyframes`
+  0% {
+    bottom: 0%;
+  }
+  100% {
+    bottom: 100%;
+  }`,
+  SW: keyframes`
+  0% {
+    top: 0%;
+  }
+  100% {
+    top: 100%;
+  }`,
+  NW: keyframes`
+  0% {
+    right: 0%;
+  }
+  100% {
+    right: 100%;
+  }`,
+}
 
 const StyledPlayer = styled.div`
   width: 43px;
   height: 70px;
 
   position: absolute;
+
+  ${({ isWalking, walkAnimation }) =>
+    isWalking &&
+    css`
+      animation: ${walkAnimation} 0.7s steps(5);
+    `}
 `
 
 // TODO: Share styled component with Tile
+
+// Multi-step animation transitions
+// https://css-tricks.com/using-multi-step-animations-transitions/
 const StyledPlayerTexture = styled.div`
   width: 100%;
   height: 100%;
 
-  z-index: 3;
+  z-index: 1000;
 
   pointer-events: none; /* Hover grid entities, not 96x96 child */
 
   background: url(${sprites});
   background-position: -${({ texturePos }) => texturePos.xPos}px ${({ texturePos }) => texturePos.yPos}px;
   background-repeat: no-repeat;
-  background-size: 400% 100%;
   image-rendering: pixelated;
   position: relative;
 
   top: -50%;
   left: -50%;
 
-  transform: rotateZ(-45deg) rotateY(-60deg) scale(3);
+  transform: rotateZ(-45deg) rotateY(-60deg) scale(2.9);
 `
 
 export const Player = ({ playerTextureIndex, symbol, path, pos }) => {
@@ -69,8 +108,16 @@ export const Player = ({ playerTextureIndex, symbol, path, pos }) => {
     }
   }, [path, pos])
 
+  const handleWalkEnd = (e) => {
+    console.log('walk cycle ended')
+  }
+
   return (
-    <StyledPlayer>
+    <StyledPlayer
+      isWalking={path && path.length > 0}
+      walkAnimation={walkAnimations[dir]}
+      onAnimationEnd={handleWalkEnd}
+    >
       {texturePos && <StyledPlayerTexture texturePos={texturePos} />}
     </StyledPlayer>
   )

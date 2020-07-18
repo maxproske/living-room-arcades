@@ -17,6 +17,8 @@ const StyledTile = styled.div`
     filter: brightness(1.2);
     transition: 0s;
   }
+
+  z-index: ${({ depth }) => depth};
 `
 
 const StyledTileTexture = styled.div`
@@ -36,6 +38,8 @@ const StyledTileTexture = styled.div`
   position: relative;
   top: -32px;
   left: -32px;
+
+  z-index: ${({ texturePos }) => texturePos.xPos + texturePos.y + 1};
 
   transform: rotateZ(-45deg) rotateY(-60deg) scale(3);
 `
@@ -92,8 +96,10 @@ export const Tile = memo(
       console.log(`clicked a tile at (${xPos},${yPos})`)
     }
 
+    // Use z-index to overlap divs correctly in 3d space
+    // https://gamedev.stackexchange.com/a/73470
     return (
-      <StyledTile onClick={handleClick}>
+      <StyledTile depth={xPos + yPos + 1} onClick={handleClick}>
         {players &&
           players.map((symbol) => (
             <Player playerTextureIndex={playerTextureIndex} symbol={symbol} />

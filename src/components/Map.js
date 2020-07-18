@@ -23,9 +23,13 @@ const StyledMap = styled.div`
 `
 
 export const Map = memo(
-  ({ map, mapTextureIndex, playerTextureIndex, handleTileClick }) => {
-    console.log({ map, mapTextureIndex, playerTextureIndex })
-
+  ({
+    map,
+    mapTextureIndex,
+    playerTextureIndex,
+    handleTileClick,
+    playerPath,
+  }) => {
     return (
       map &&
       mapTextureIndex &&
@@ -46,6 +50,7 @@ export const Map = memo(
                     yPos={y}
                     key={`${x},${y}`}
                     handleTileClick={handleTileClick}
+                    playerPath={playerPath}
                   />
                 )
               })

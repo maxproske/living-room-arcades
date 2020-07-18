@@ -42,6 +42,8 @@ const StyledTileTexture = styled.div`
   z-index: ${({ texturePos }) => texturePos.xPos + texturePos.y + 1};
 
   transform: rotateZ(-45deg) rotateY(-60deg) scale(3);
+
+  ${({ isInPlayerPath }) => isInPlayerPath && `filter: brightness(0.5);`}
 `
 
 // Note: memo prevents React from re-rendering tile every frame
@@ -55,8 +57,23 @@ export const Tile = memo(
     xPos,
     yPos,
     handleTileClick,
+    playerPath,
   }) => {
     const [texturePos, setTexturePos] = useState(null)
+    const [isInPlayerPath, setIsInPlayerPath] = useState(false)
+
+    // Check if tile position is in playerPath array
+    useEffect(() => {
+      if (playerPath) {
+        setIsInPlayerPath(false) // Clear
+
+        playerPath.forEach((pos) => {
+          if (pos.x === xPos && pos.y === yPos) {
+            setIsInPlayerPath(true)
+          }
+        })
+      }
+    }, [playerPath, xPos, yPos])
 
     useEffect(() => {
       if (entities && entities.length > 0) {
@@ -94,9 +111,15 @@ export const Tile = memo(
     }, [symbol, mapTextureIndex])
 
     const handleClick = () => {
-      console.log(`clicked a tile at (${xPos},${yPos})`)
+      console.log(`clicked ${xPos},${yPos}`)
 
-      handleTileClick(xPos, yPos)
+      const tile = {
+        pos: {
+          x: xPos,
+          y: yPos,
+        },
+      }
+      handleTileClick(tile)
     }
 
     // Use z-index to overlap divs correctly in 3d space
@@ -111,7 +134,12 @@ export const Tile = memo(
           entities.map((symbol) => (
             <Entity mapTextureIndex={mapTextureIndex} symbol={symbol} />
           ))}
-        {texturePos && <StyledTileTexture texturePos={texturePos} />}
+        {texturePos && (
+          <StyledTileTexture
+            isInPlayerPath={isInPlayerPath}
+            texturePos={texturePos}
+          />
+        )}
       </StyledTile>
     )
   }

@@ -29,7 +29,7 @@ export const Game = () => {
   const [frames, tick] = useGameStatus()
   const [entities, setEntities] = useEntities(level1Entities)
   const [player, setPlayer, playerTextureIndex] = usePlayer(playerTextureFile)
-  const [map, setMap, mapTextureIndex, handleTileClick] = useMap(
+  const [map, setMap, mapTextureIndex, handleTileClick, playerPath] = useMap(
     level1,
     level1TextureFile,
     entities,
@@ -49,7 +49,7 @@ export const Game = () => {
     tick()
   }, 1000)
 
-  console.log(`rendering frame ${frames}`)
+  console.log(`Frame ${frames}`)
 
   // Note: Without the role attribute, you would have to click the map for inputs to register
   return (
@@ -64,6 +64,7 @@ export const Game = () => {
         mapTextureIndex={mapTextureIndex}
         playerTextureIndex={playerTextureIndex}
         handleTileClick={handleTileClick}
+        playerPath={playerPath}
       />
     </StyledGameWrapper>
   )

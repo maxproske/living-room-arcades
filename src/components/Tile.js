@@ -54,6 +54,7 @@ export const Tile = memo(
     players,
     xPos,
     yPos,
+    handleTileClick,
   }) => {
     const [texturePos, setTexturePos] = useState(null)
 
@@ -94,6 +95,8 @@ export const Tile = memo(
 
     const handleClick = () => {
       console.log(`clicked a tile at (${xPos},${yPos})`)
+
+      handleTileClick(xPos, yPos)
     }
 
     // Use z-index to overlap divs correctly in 3d space

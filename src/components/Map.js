@@ -22,33 +22,37 @@ const StyledMap = styled.div`
   height: ${({ cols }) => cols * 64}px;
 `
 
-export const Map = memo(({ map, mapTextureIndex, playerTextureIndex }) => {
-  console.log({ map, mapTextureIndex, playerTextureIndex })
-  return (
-    map &&
-    mapTextureIndex &&
-    playerTextureIndex && (
-      <StyledMapWrapper>
-        <StyledMap rows={map.length} cols={map[0].length}>
-          {map.map((row, y) =>
-            row.map((tile, x) => {
-              // TODO: Store mapTextureIndex in state instead of prop drilling
-              return (
-                <Tile
-                  mapTextureIndex={mapTextureIndex}
-                  playerTextureIndex={playerTextureIndex}
-                  symbol={tile.symbol}
-                  entities={tile.entities}
-                  players={tile.players}
-                  xPos={x}
-                  yPos={y}
-                  key={`${x},${y}`}
-                />
-              )
-            })
-          )}
-        </StyledMap>
-      </StyledMapWrapper>
+export const Map = memo(
+  ({ map, mapTextureIndex, playerTextureIndex, handleTileClick }) => {
+    console.log({ map, mapTextureIndex, playerTextureIndex })
+
+    return (
+      map &&
+      mapTextureIndex &&
+      playerTextureIndex && (
+        <StyledMapWrapper>
+          <StyledMap rows={map.length} cols={map[0].length}>
+            {map.map((row, y) =>
+              row.map((tile, x) => {
+                // TODO: Store mapTextureIndex in state instead of prop drilling
+                return (
+                  <Tile
+                    mapTextureIndex={mapTextureIndex}
+                    playerTextureIndex={playerTextureIndex}
+                    symbol={tile.symbol}
+                    entities={tile.entities}
+                    players={tile.players}
+                    xPos={x}
+                    yPos={y}
+                    key={`${x},${y}`}
+                    handleTileClick={handleTileClick}
+                  />
+                )
+              })
+            )}
+          </StyledMap>
+        </StyledMapWrapper>
+      )
     )
-  )
-})
+  }
+)

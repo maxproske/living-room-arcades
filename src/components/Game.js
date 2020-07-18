@@ -29,16 +29,20 @@ export const Game = () => {
   const [frames, tick] = useGameStatus()
   const [entities, setEntities] = useEntities(level1Entities)
   const [player, setPlayer, playerTextureIndex] = usePlayer(playerTextureFile)
-  const [map, setMap, mapTextureIndex] = useMap(
+  const [map, setMap, mapTextureIndex, handleTileClick] = useMap(
     level1,
     level1TextureFile,
     entities,
     player
   )
 
-  const handleKeyDown = () => {}
+  const handleKeyDown = ({ keyCode }) => {
+    console.log(`keyCode ${keyCode} down`)
+  }
 
-  const handleKeyUp = () => {}
+  const handleKeyUp = ({ keyCode }) => {
+    console.log(`keyCode ${keyCode} up`)
+  }
 
   // Game loop
   useInterval(() => {
@@ -59,6 +63,7 @@ export const Game = () => {
         map={map}
         mapTextureIndex={mapTextureIndex}
         playerTextureIndex={playerTextureIndex}
+        handleTileClick={handleTileClick}
       />
     </StyledGameWrapper>
   )

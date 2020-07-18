@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
-import { createMap, createTextureIndex } from '../utils/gameHelpers'
+import { createMap, createTextureIndex, astar } from '../utils/gameHelpers'
 
 export const useMap = (mapFile, texturesFile, entities, player) => {
   const [map, setMap] = useState(null)
@@ -29,5 +29,19 @@ export const useMap = (mapFile, texturesFile, entities, player) => {
     // setMap((prev) => updateMap(prev))
   }, [])
 
-  return [map, setMap, textureIndex]
+  // Invoke useCallback to prevent extra rerenders
+  const handleTileClick = useCallback(
+    (xPos, yPos) => {
+      console.log(`player (${player.x},${player.y}) clicked (${xPos}, ${yPos})`)
+
+      const playerPos = { x: player.x, y: player.y }
+      const tilePos = { x: xPos, y: yPos }
+
+      const path = astar(map, playerPos, tilePos)
+      console.log('path', path)
+    },
+    [map, player]
+  )
+
+  return [map, setMap, textureIndex, handleTileClick]
 }

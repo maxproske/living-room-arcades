@@ -65,13 +65,10 @@ export const Tile = memo(
     // Check if tile position is in playerPath array
     useEffect(() => {
       if (playerPath) {
-        setIsInPlayerPath(false) // Clear
-
-        playerPath.forEach((pos) => {
-          if (pos.x === xPos && pos.y === yPos) {
-            setIsInPlayerPath(true)
-          }
-        })
+        const inPath = playerPath.some(
+          (pos) => pos.x === xPos && pos.y === yPos
+        )
+        setIsInPlayerPath(inPath)
       }
     }, [playerPath, xPos, yPos])
 
@@ -128,7 +125,12 @@ export const Tile = memo(
       <StyledTile depth={xPos + yPos + 1} onClick={handleClick}>
         {players &&
           players.map((symbol) => (
-            <Player playerTextureIndex={playerTextureIndex} symbol={symbol} />
+            <Player
+              pos={{ x: xPos, y: yPos }}
+              playerTextureIndex={playerTextureIndex}
+              symbol={symbol}
+              path={playerPath}
+            />
           ))}
         {entities &&
           entities.map((symbol) => (

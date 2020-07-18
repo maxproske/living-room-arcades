@@ -32,16 +32,15 @@ const StyledPlayerTexture = styled.div`
   transform: rotateZ(-45deg) rotateY(-60deg) scale(3);
 `
 
-export const Player = ({ playerTextureIndex, symbol }) => {
+export const Player = ({ playerTextureIndex, symbol, path, pos }) => {
   const [texturePos, setTexturePos] = useState(null)
-
-  console.log('playerTextureIndex', playerTextureIndex)
+  const [dir, setDir] = useState('SE')
 
   // Get background position for texture
   useEffect(() => {
     if (playerTextureIndex) {
       // Assume no animation frames
-      const playerTexture = playerTextureIndex['r'][0]
+      const playerTexture = playerTextureIndex[dir][0]
       const texturePosUpdate = {
         xPos: playerTexture.xPos,
         yPos: playerTexture.yPos,
@@ -49,7 +48,26 @@ export const Player = ({ playerTextureIndex, symbol }) => {
 
       setTexturePos(texturePosUpdate)
     }
-  }, [playerTextureIndex, symbol])
+  }, [dir, playerTextureIndex, symbol])
+
+  useEffect(() => {
+    if (path && path.length > 1) {
+      const nextPos = path[1]
+      const xDist = nextPos.x - pos.x
+      const yDist = nextPos.y - pos.y
+      const dirUpdate =
+        xDist > 0
+          ? 'SE'
+          : xDist < 0
+          ? 'NW'
+          : yDist > 0
+          ? 'SW'
+          : yDist < 0
+          ? 'NE'
+          : '?'
+      setDir(dirUpdate)
+    }
+  }, [path, pos])
 
   return (
     <StyledPlayer>

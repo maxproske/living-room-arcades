@@ -131,8 +131,8 @@ export const createPlayerTextureIndex = async (file) => {
   // Split multiline string into an array of lines
   const lines = atlas.split(/\r?\n/)
   lines.forEach((line) => {
-    const direction = line.charAt(0) // Get first character from the string
-    const directionData = line.substr(2).split(',')
+    const direction = line.substring(0, 2) // Get first character from the string
+    const directionData = line.substr(3).split(',')
     let [x, y, numAnimations] = directionData
 
     textureIndex[direction] = []

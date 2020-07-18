@@ -1,12 +1,14 @@
 import { useState, useEffect, useCallback } from 'react'
 
 import { createMap, createTextureIndex } from '../utils/gameHelpers'
-import { getPath } from '../utils/pathing'
+import { findPath } from '../utils/pathing'
 
 export const useMap = (mapFile, texturesFile, entities, player) => {
   const [map, setMap] = useState(null)
   const [textureIndex, setTextureIndex] = useState(null)
   const [playerPath, setPlayerPath] = useState(null)
+  const [isWalking, setIsWalking] = useState(false)
+  const [pathIndex, setPathIndex] = useState(null)
 
   // Initialize map
   useEffect(() => {
@@ -42,11 +44,17 @@ export const useMap = (mapFile, texturesFile, entities, player) => {
         x: tile.pos.x,
         y: tile.pos.y,
       }
-      const playerPathUpdate = getPath(map, startPos, endPos)
+      const playerPathUpdate = findPath(map, startPos, endPos)
       setPlayerPath(playerPathUpdate)
+      setIsWalking(true)
     },
     [map, player]
   )
+
+  const movePlayer = useCallback(() => {
+    if (isWalking) {
+    }
+  }, [isWalking])
 
   return [map, setMap, textureIndex, handleTileClick, playerPath]
 }

@@ -3,7 +3,7 @@ import { pqPush, pqPop } from './pqueue'
 // Astar implementation by Jack Mott
 // translated from Go to JavaScript
 // https://www.youtube.com/watch?v=FESffgzrxJU
-export const getPath = (level, start, goal) => {
+export const findPath = (level, start, goal) => {
   let frontier = [] // Growing/shrinking frontier isn't optimal
   frontier = pqPush(frontier, start, 1) // Priority of 1
 
@@ -35,13 +35,15 @@ export const getPath = (level, start, goal) => {
       path.push(p)
 
       // Reverse array
-      for (let i = 0, j = path.length - 1; i < j; i = i + 1, j = j - 1) {
+      for (let i = 0, j = path.length - 1; i < j; i++, j--) {
         let tmp = path[i]
         path[i] = path[j]
         path[j] = tmp
       }
 
-      console.log(`Path: ${path.map((pos) => `${pos.x},${pos.y}`).join(' → ')}`)
+      console.log(
+        `Found path: ${path.map((pos) => `${pos.x},${pos.y}`).join(' → ')}`
+      )
 
       return path
     }

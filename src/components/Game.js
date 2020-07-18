@@ -29,12 +29,15 @@ export const Game = () => {
   const [frames, tick] = useGameStatus()
   const [entities, setEntities] = useEntities(level1Entities)
   const [player, setPlayer, playerTextureIndex] = usePlayer(playerTextureFile)
-  const [map, setMap, mapTextureIndex, handleTileClick, playerPath] = useMap(
-    level1,
-    level1TextureFile,
-    entities,
-    player
-  )
+  const [
+    map,
+    setMap,
+    mapTextureIndex,
+    handleTileClick,
+    playerPath,
+    handleWalkEnd,
+    playerPathIndex,
+  ] = useMap(level1, level1TextureFile, entities, player, setPlayer)
 
   const handleKeyDown = ({ keyCode }) => {
     console.log(`keyCode ${keyCode} down`)
@@ -65,6 +68,8 @@ export const Game = () => {
         playerTextureIndex={playerTextureIndex}
         handleTileClick={handleTileClick}
         playerPath={playerPath}
+        handleWalkEnd={handleWalkEnd}
+        playerPathIndex={playerPathIndex}
       />
     </StyledGameWrapper>
   )

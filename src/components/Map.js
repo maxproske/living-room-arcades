@@ -29,6 +29,8 @@ export const Map = memo(
     playerTextureIndex,
     handleTileClick,
     playerPath,
+    handleWalkEnd,
+    playerPathIndex,
   }) => {
     return (
       map &&
@@ -51,6 +53,8 @@ export const Map = memo(
                     key={`${x},${y}`}
                     handleTileClick={handleTileClick}
                     playerPath={playerPath}
+                    handleWalkEnd={handleWalkEnd}
+                    playerPathIndex={playerPathIndex}
                   />
                 )
               })

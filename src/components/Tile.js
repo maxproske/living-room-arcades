@@ -57,6 +57,8 @@ export const Tile = memo(
     yPos,
     handleTileClick,
     playerPath,
+    handleWalkEnd,
+    playerPathIndex,
   }) => {
     const [texturePos, setTexturePos] = useState(null)
     const [isInPlayerPath, setIsInPlayerPath] = useState(false)
@@ -129,6 +131,8 @@ export const Tile = memo(
               playerTextureIndex={playerTextureIndex}
               symbol={symbol}
               path={playerPath}
+              handleWalkEnd={handleWalkEnd}
+              pathIndex={playerPathIndex}
             />
           ))}
         {entities &&

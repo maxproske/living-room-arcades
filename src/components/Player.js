@@ -20,17 +20,17 @@ const walkAnimations = {
   }`,
   SW: keyframes`
   0% {
-    top: 0%;
+    bottom: 0%;
   }
   100% {
-    top: 100%;
+    bottom: -100%;
   }`,
   NW: keyframes`
   0% {
-    right: 0%;
+    left: 0%;
   }
   100% {
-    right: 100%;
+    left: -100%;
   }`,
 }
 
@@ -71,7 +71,14 @@ const StyledPlayerTexture = styled.div`
   transform: rotateZ(-45deg) rotateY(-60deg) scale(2.9);
 `
 
-export const Player = ({ playerTextureIndex, symbol, path, pos }) => {
+export const Player = ({
+  playerTextureIndex,
+  symbol,
+  path,
+  pos,
+  handleWalkEnd,
+  pathIndex,
+}) => {
   const [texturePos, setTexturePos] = useState(null)
   const [dir, setDir] = useState('SE')
 
@@ -90,8 +97,9 @@ export const Player = ({ playerTextureIndex, symbol, path, pos }) => {
   }, [dir, playerTextureIndex, symbol])
 
   useEffect(() => {
-    if (path && path.length > 1) {
-      const nextPos = path[1]
+    if (path && pathIndex < path.length - 1) {
+      const nextPos = path[pathIndex + 1]
+      console.log({ pos, nextPos })
       const xDist = nextPos.x - pos.x
       const yDist = nextPos.y - pos.y
       const dirUpdate =
@@ -103,18 +111,18 @@ export const Player = ({ playerTextureIndex, symbol, path, pos }) => {
           ? 'SW'
           : yDist < 0
           ? 'NE'
-          : '?'
-      setDir(dirUpdate)
-    }
-  }, [path, pos])
+          : dir
 
-  const handleWalkEnd = (e) => {
-    console.log('walk cycle ended')
-  }
+      if (dir !== dirUpdate) {
+        console.log('dirUpdate', dirUpdate)
+        setDir(dirUpdate)
+      }
+    }
+  }, [dir, path, pathIndex, pos, pos.x, pos.y])
 
   return (
     <StyledPlayer
-      isWalking={path && path.length > 0}
+      isWalking={path && pathIndex < path.length - 1}
       walkAnimation={walkAnimations[dir]}
       onAnimationEnd={handleWalkEnd}
     >

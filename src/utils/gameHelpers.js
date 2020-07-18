@@ -30,10 +30,6 @@ export const createMap = async (file, entities, player) => {
 
     for (let x = 0; x < line.length; x++) {
       const symbol = line.charAt(x)
-      const pos = {
-        xPos: x,
-        yPos: y,
-      }
       let tile
 
       switch (symbol) {

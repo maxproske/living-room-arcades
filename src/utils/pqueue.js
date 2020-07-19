@@ -23,14 +23,15 @@ export const pqPush = (pq, pos, priority) => {
 
 // Remove something from the queue
 export const pqPop = (pq) => {
-  let pos = pq[0].pos // Always return the root
+  let result = pq[0].pos // Always return the root
   // Replace root with rightmost leaf node
   // up to but not rightmode leaf node. shrink slice by 1
-  pq[0] = pq.pop()
+  pq[0] = pq[pq.length - 1]
+  pq = pq.slice(0, pq.length - 1)
 
   // Edge case if length of pq is 0
   if (pq.length === 0) {
-    return [pq, pos] // Go style returns are sexy
+    return [pq, result] // Go style returns are sexy
   }
 
   // New root at 0
@@ -58,7 +59,7 @@ export const pqPop = (pq) => {
   }
 
   // Once the loop exists, we know we have a valid heap again
-  return [pq, pos]
+  return [pq, result]
 }
 
 const pqSwap = (pq, i, j) => {

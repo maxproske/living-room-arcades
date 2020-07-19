@@ -43,7 +43,7 @@ const StyledPlayer = styled.div`
   ${({ isWalking, walkAnimation }) =>
     isWalking &&
     css`
-      animation: ${walkAnimation} 0.7s steps(5);
+      animation: ${walkAnimation} 0.45s steps(6);
     `}
 `
 
@@ -126,7 +126,7 @@ export const Player = ({
       walkAnimation={walkAnimations[dir]}
       onAnimationEnd={handleWalkEnd}
     >
-      {texturePos && <StyledPlayerTexture texturePos={texturePos} />}
+      {dir && texturePos && <StyledPlayerTexture texturePos={texturePos} />}
     </StyledPlayer>
   )
 }

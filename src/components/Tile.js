@@ -17,16 +17,12 @@ const StyledTile = styled.div`
     filter: brightness(1.2);
     transition: 0s;
   }
-
-  z-index: ${({ depth }) => depth};
 `
 
 const StyledTileTexture = styled.div`
   width: 100%;
   height: 100%;
   position: absolute;
-
-  z-index: 1;
 
   pointer-events: none; /* Hover grid entities, not 96x96 child */
 

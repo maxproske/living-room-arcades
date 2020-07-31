@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import { ThemeProvider } from 'styled-components'
 import { GlobalStyle } from './GlobalStyle'
+
+import { SocketProvider } from '../store/SocketContext'
 
 import { Game } from './Game'
 
@@ -13,8 +15,10 @@ const theme = {
 export const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <Game />
-      <GlobalStyle />
+      <SocketProvider url={'http://localhost:4000'}>
+        <Game />
+        <GlobalStyle />
+      </SocketProvider>
     </ThemeProvider>
   )
 }

@@ -1,7 +1,9 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useContext } from 'react'
 
 import { createMap, createTextureIndex } from '../utils/gameHelpers'
 import { findPath } from '../utils/pathing'
+
+import { useSocket } from '../store/SocketContext'
 
 export const useMap = (mapFile, texturesFile, entities, player, setPlayer) => {
   const [map, setMap] = useState(null)
@@ -9,6 +11,8 @@ export const useMap = (mapFile, texturesFile, entities, player, setPlayer) => {
   const [playerPath, setPlayerPath] = useState(null)
   const [isWalking, setIsWalking] = useState(false)
   const [playerPathIndex, setPlayerPathIndex] = useState(null)
+
+  const socket = useSocket()
 
   // Initialize map
   useEffect(() => {
@@ -54,6 +58,9 @@ export const useMap = (mapFile, texturesFile, entities, player, setPlayer) => {
 
       // This is disgusting
       if (nextPos) {
+        // Wee sockets
+        socket.emit('UPDATE_POS', nextPos)
+
         let mapUpdate = map
         mapUpdate[player.pos.y][player.pos.x].players = []
         mapUpdate[nextPos.y][nextPos.x].players = [
@@ -74,7 +81,7 @@ export const useMap = (mapFile, texturesFile, entities, player, setPlayer) => {
         setMap(mapUpdate)
       }
     }
-  }, [map, playerPathIndex, player, playerPath, setPlayer])
+  }, [playerPathIndex, playerPath, socket, map, player, setPlayer])
 
   return [
     map,

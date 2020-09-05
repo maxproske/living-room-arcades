@@ -4,8 +4,9 @@ const tiles = {
   wall: '#',
 }
 
-export const createMap = async (file, entities, player) => {
+export const createMap = async (file, entitiesFile, player) => {
   const level = await fetch(file).then((response) => response.text())
+  const entities = await fetch(entitiesFile).then((response) => response.json())
 
   // Split multiline string into an array of lines
   const levelLines = level.split(/\r?\n/)

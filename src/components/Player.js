@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import styled, { keyframes, css } from 'styled-components'
 
-import sprites from '../assets/player.png'
+const sprites = '/assets/player.png'
 
 const walkAnimations = {
   SE: keyframes`

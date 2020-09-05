@@ -12,12 +12,12 @@ import { useGameStatus } from '../hooks/useGameStatus'
 import { usePlayer } from '../hooks/usePlayer'
 
 // Placeholder level
-import level1 from '../maps/level1.txt'
-import level1Entities from '../maps/entities.json'
-import level1TextureFile from '../assets/basic-index.txt'
+const level1 = '/maps/level1.txt'
+const level1Entities = '/maps/entities.json'
+const level1TextureFile = '/assets/basic-index.txt'
 
 // Placeholder player
-import playerTextureFile from '../assets/player-index.txt'
+const playerTextureFile = '/assets/player-index.txt'
 
 const StyledGameWrapper = styled.div`
   width: 100vw;
@@ -52,7 +52,7 @@ export const Game = () => {
     tick()
   }, 1000)
 
-  console.error('Rendered Game')
+  console.log('Rendered Game')
 
   // Note: Without the role attribute, you would have to click the map for inputs to register
   return (

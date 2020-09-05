@@ -1,7 +1,7 @@
-import React, { useState, useEffect, memo } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
-import tiles from '../assets/basic.png'
+const tiles = '/assets/basic.png'
 
 const StyledEntity = styled.div`
   width: 100%;

@@ -1,11 +1,11 @@
-import React, { useState, useEffect, memo } from 'react'
+import { useState, useEffect, memo } from 'react'
 import styled from 'styled-components'
 
 // Components
 import { Entity } from './Entity'
 import { Player } from './Player'
 
-import tiles from '../assets/basic.png'
+const tiles = '/assets/basic.png'
 
 const StyledTile = styled.div`
   background-color: rgba(255, 100, 100, 0);

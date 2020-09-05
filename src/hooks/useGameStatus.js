@@ -1,12 +1,15 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 export const useGameStatus = () => {
   const [frames, setFrames] = useState(0)
 
-  // Is it necessary to wrap this in a useCallback?
-  const tick = useCallback(() => {
-    setFrames(frames + 1)
+  useEffect(() => {
+    console.log(`Frame ${frames}`)
   }, [frames])
+
+  const tick = () => {
+    setFrames((prev) => prev + 1)
+  }
 
   return [frames, tick]
 }

@@ -123,6 +123,7 @@ export const Tile = memo(
         {players &&
           players.map((symbol) => (
             <Player
+              key={symbol}
               pos={{ x: xPos, y: yPos }}
               playerTextureIndex={playerTextureIndex}
               symbol={symbol}
@@ -133,7 +134,11 @@ export const Tile = memo(
           ))}
         {entities &&
           entities.map((symbol) => (
-            <Entity mapTextureIndex={mapTextureIndex} symbol={symbol} />
+            <Entity
+              key={mapTextureIndex}
+              mapTextureIndex={mapTextureIndex}
+              symbol={symbol}
+            />
           ))}
         {texturePos && (
           <StyledTileTexture

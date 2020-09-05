@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 // Components
@@ -52,7 +52,7 @@ export const Game = () => {
     tick()
   }, 1000)
 
-  console.log(`Frame ${frames}`)
+  console.error('Rendered Game')
 
   // Note: Without the role attribute, you would have to click the map for inputs to register
   return (

@@ -11,6 +11,8 @@ const theme = {
 }
 
 export const App = () => {
+  console.log('Rendered App')
+
   return (
     <ThemeProvider theme={theme}>
       <Game />

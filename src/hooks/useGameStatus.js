@@ -4,7 +4,7 @@ export const useGameStatus = () => {
   const [frames, setFrames] = useState(0)
 
   useEffect(() => {
-    console.log(`Frame ${frames}`)
+    // console.log(`Frame ${frames}`)
   }, [frames])
 
   const tick = () => {

@@ -1,5 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import styled, { keyframes, css } from 'styled-components'
+import UserContext from '../stores/UserContext'
+
+import { useTrace } from '../utils/debug'
+
+import { updateDir } from '../stores/userActions'
 
 const sprites = '/assets/player.png'
 
@@ -43,7 +48,7 @@ const StyledPlayer = styled.div`
   ${({ isWalking, walkAnimation }) =>
     isWalking &&
     css`
-      animation: ${walkAnimation} 0.45s steps(6);
+      animation: ${walkAnimation} 0.45s steps(3);
     `}
 `
 
@@ -79,14 +84,23 @@ export const Player = ({
   handleWalkEnd,
   pathIndex,
 }) => {
+  useTrace({
+    playerTextureIndex,
+    symbol,
+    path,
+    pos,
+    handleWalkEnd,
+    pathIndex,
+  })
+
+  const [state, dispatch] = useContext(UserContext)
   const [texturePos, setTexturePos] = useState(null)
-  const [dir, setDir] = useState('SE')
 
   // Get background position for texture
   useEffect(() => {
-    if (playerTextureIndex) {
+    if (playerTextureIndex && state.dir) {
       // Assume no animation frames
-      const playerTexture = playerTextureIndex[dir][0]
+      const playerTexture = playerTextureIndex[state.dir][0]
       const texturePosUpdate = {
         xPos: playerTexture.xPos,
         yPos: playerTexture.yPos,
@@ -94,12 +108,11 @@ export const Player = ({
 
       setTexturePos(texturePosUpdate)
     }
-  }, [dir, playerTextureIndex, symbol])
+  }, [state.dir, playerTextureIndex, symbol])
 
   useEffect(() => {
     if (path && pathIndex < path.length - 1) {
       const nextPos = path[pathIndex + 1]
-      console.log({ pos, nextPos })
       const xDist = nextPos.x - pos.x
       const yDist = nextPos.y - pos.y
       const dirUpdate =
@@ -111,22 +124,23 @@ export const Player = ({
           ? 'SW'
           : yDist < 0
           ? 'NE'
-          : dir
+          : state.dir
 
-      if (dir !== dirUpdate) {
-        console.log('dirUpdate', dirUpdate)
-        setDir(dirUpdate)
+      if (state.dir !== dirUpdate) {
+        dispatch(updateDir(dirUpdate))
       }
     }
-  }, [dir, path, pathIndex, pos, pos.x, pos.y])
+  }, [dispatch, path, pathIndex, pos, state.dir])
 
   return (
     <StyledPlayer
       isWalking={path && pathIndex < path.length - 1}
-      walkAnimation={walkAnimations[dir]}
+      walkAnimation={walkAnimations[state.dir]}
       onAnimationEnd={handleWalkEnd}
     >
-      {dir && texturePos && <StyledPlayerTexture texturePos={texturePos} />}
+      {state.dir && texturePos && (
+        <StyledPlayerTexture texturePos={texturePos} />
+      )}
     </StyledPlayer>
   )
 }

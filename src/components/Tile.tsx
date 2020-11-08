@@ -1,13 +1,15 @@
-import { useState, useEffect, memo } from 'react'
-import styled from 'styled-components'
+import { useState, useEffect, memo } from 'react';
+import styled from 'styled-components';
 
 // Components
-import { Entity } from './Entity'
-import { Player } from './Player'
+import { Entity } from './Entity';
+import { Player } from './Player';
 
-const tiles = '/assets/basic.png'
+import { Pos } from '~/types';
 
-const StyledTile = styled.div`
+const tiles = '/assets/basic.png';
+
+const StyledTile = styled.div<{ depth: number }>`
   background-color: rgba(255, 100, 100, 0);
 
   transition: 0.15s;
@@ -17,9 +19,12 @@ const StyledTile = styled.div`
     filter: brightness(1.2);
     transition: 0s;
   }
-`
+`;
 
-const StyledTileTexture = styled.div`
+const StyledTileTexture = styled.div<{
+  texturePos: Pos;
+  isInPlayerPath: boolean;
+}>`
   width: 100%;
   height: 100%;
   position: absolute;
@@ -34,15 +39,29 @@ const StyledTileTexture = styled.div`
   top: -50%;
   left: -50%;
 
-  z-index: ${({ texturePos }) => texturePos.xPos + texturePos.y + 1};
-
   transform: rotateZ(-45deg) rotateY(-60deg) scale(2.9);
 
   ${({ isInPlayerPath }) => isInPlayerPath && `filter: brightness(0.5);`}
-`
+`;
+
+interface TileProps {
+  mapTextureIndex: any;
+  playerTextureIndex: any;
+  symbol: any;
+  entities: any;
+  players: any;
+  xPos: any;
+  yPos: any;
+  handleTileClick: any;
+  playerPath: any;
+  handleWalkEnd: any;
+  playerPathIndex: any;
+}
+
+/* eslint-disable react/display-name */
 
 // Note: memo prevents React from re-rendering tile every frame
-export const Tile = memo(
+export const Tile: React.FC<TileProps> = memo(
   ({
     mapTextureIndex,
     playerTextureIndex,
@@ -56,72 +75,72 @@ export const Tile = memo(
     handleWalkEnd,
     playerPathIndex,
   }) => {
-    const [texturePos, setTexturePos] = useState(null)
-    const [isInPlayerPath, setIsInPlayerPath] = useState(false)
+    const [texturePos, setTexturePos] = useState<Pos | null>(null);
+    const [isInPlayerPath, setIsInPlayerPath] = useState(false);
 
     // Check if tile position is in playerPath array
     useEffect(() => {
       if (playerPath) {
         const inPath = playerPath.some(
-          (pos) => pos.x === xPos && pos.y === yPos
-        )
-        setIsInPlayerPath(inPath)
+          (pos: any) => pos.x === xPos && pos.y === yPos
+        );
+        setIsInPlayerPath(inPath);
       }
-    }, [playerPath, xPos, yPos])
+    }, [playerPath, xPos, yPos]);
 
     useEffect(() => {
       if (entities && entities.length > 0) {
-        console.log(`found entities at (${xPos},${yPos})`)
+        console.log(`found entities at (${xPos},${yPos})`);
       }
-    }, [entities, xPos, yPos])
+    }, [entities, xPos, yPos]);
 
     // Get background position for texture
     useEffect(() => {
       if (mapTextureIndex[symbol]) {
         // Handle blank tiles
         if (mapTextureIndex[symbol].length === 0) {
-          const texturePosUpdate = {
+          const texturePosUpdate: Pos = {
             xPos: 0,
             yPos: 0,
-          }
+          };
 
-          setTexturePos(texturePosUpdate)
-          return
+          setTexturePos(texturePosUpdate);
+          return;
         }
 
         // Get random texture variation
         const tileTexture =
           mapTextureIndex[symbol][
             Math.floor(Math.random() * mapTextureIndex[symbol].length)
-          ]
+          ];
         const texturePosUpdate = {
           xPos: tileTexture.xPos,
           yPos: tileTexture.yPos,
-        }
+        };
 
-        setTexturePos(texturePosUpdate)
-        return
+        setTexturePos(texturePosUpdate);
+        return;
       }
-    }, [symbol, mapTextureIndex])
+    }, [symbol, mapTextureIndex]);
 
     const handleClick = () => {
-      console.log(`clicked ${xPos},${yPos}`)
+      console.log(`clicked ${xPos},${yPos}`);
 
       const tile = {
         pos: {
           x: xPos,
           y: yPos,
         },
-      }
-      handleTileClick(tile)
-    }
+      };
+      handleTileClick(tile);
+    };
 
     // Use z-index to overlap divs correctly in 3d space
     // https://gamedev.stackexchange.com/a/73470
     return (
       <StyledTile depth={xPos + yPos + 1} onClick={handleClick}>
         {players &&
-          players.map((symbol) => (
+          players.map((symbol: string) => (
             <Player
               key={symbol}
               pos={{ x: xPos, y: yPos }}
@@ -133,7 +152,7 @@ export const Tile = memo(
             />
           ))}
         {entities &&
-          entities.map((symbol) => (
+          entities.map((symbol: string) => (
             <Entity
               key={mapTextureIndex}
               mapTextureIndex={mapTextureIndex}
@@ -147,6 +166,6 @@ export const Tile = memo(
           />
         )}
       </StyledTile>
-    )
+    );
   }
-)
+);

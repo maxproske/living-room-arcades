@@ -14,3 +14,4 @@ I'm making a 2.5D game in React without `<canvas>` as a constraint, to improve m
 
 ## Resources
 - [Calculations](https://codepen.io/rdfriedl/pen/bdvrjM)
+- [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app)

@@ -1,6 +1,7 @@
 {
-    "recommendations": [
-        "dbaeumer.vscode-eslint", 
-        "dsznajder.es7-react-js-snippets"
-    ]
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "rbbit.typescript-hero"
+  ]
 }

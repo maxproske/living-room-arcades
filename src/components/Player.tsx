@@ -1,14 +1,14 @@
-import { useState, useEffect, useContext } from 'react'
-import styled, { keyframes, css } from 'styled-components'
-import UserContext from '../stores/UserContext'
+import { useState, useEffect } from 'react';
+import styled, { keyframes, css } from 'styled-components';
+import { useUser } from '../stores/UserProvider';
 
-import { useTrace } from '../utils/debug'
+import { updateDir } from '../stores/userActions';
 
-import { updateDir } from '../stores/userActions'
+import { Pos } from '~/types';
 
-const sprites = '/assets/player.png'
+const sprites = '/assets/player.png';
 
-const walkAnimations = {
+const walkAnimations: any = {
   SE: keyframes`
   0% {
     left: 0%;
@@ -37,9 +37,9 @@ const walkAnimations = {
   100% {
     left: -100%;
   }`,
-}
+};
 
-const StyledPlayer = styled.div`
+const StyledPlayer = styled.div<{ isWalking: boolean; walkAnimation: any }>`
   width: 43px;
   height: 70px;
 
@@ -50,13 +50,13 @@ const StyledPlayer = styled.div`
     css`
       animation: ${walkAnimation} 0.45s steps(3);
     `}
-`
+`;
 
 // TODO: Share styled component with Tile
 
 // Multi-step animation transitions
 // https://css-tricks.com/using-multi-step-animations-transitions/
-const StyledPlayerTexture = styled.div`
+const StyledPlayerTexture = styled.div<{ texturePos: Pos }>`
   width: 100%;
   height: 100%;
 
@@ -74,9 +74,18 @@ const StyledPlayerTexture = styled.div`
   left: -50%;
 
   transform: rotateZ(-45deg) rotateY(-60deg) scale(2.9);
-`
+`;
 
-export const Player = ({
+interface PlayerProps {
+  playerTextureIndex: any;
+  symbol: any;
+  path: any;
+  pos: any;
+  handleWalkEnd: any;
+  pathIndex: any;
+}
+
+export const Player: React.FC<PlayerProps> = ({
   playerTextureIndex,
   symbol,
   path,
@@ -84,37 +93,28 @@ export const Player = ({
   handleWalkEnd,
   pathIndex,
 }) => {
-  useTrace({
-    playerTextureIndex,
-    symbol,
-    path,
-    pos,
-    handleWalkEnd,
-    pathIndex,
-  })
-
-  const [state, dispatch] = useContext(UserContext)
-  const [texturePos, setTexturePos] = useState(null)
+  const { state, dispatch } = useUser();
+  const [texturePos, setTexturePos] = useState<Pos | null>(null);
 
   // Get background position for texture
   useEffect(() => {
     if (playerTextureIndex && state.dir) {
       // Assume no animation frames
-      const playerTexture = playerTextureIndex[state.dir][0]
+      const playerTexture = playerTextureIndex[state.dir][0];
       const texturePosUpdate = {
         xPos: playerTexture.xPos,
         yPos: playerTexture.yPos,
-      }
+      };
 
-      setTexturePos(texturePosUpdate)
+      setTexturePos(texturePosUpdate);
     }
-  }, [state.dir, playerTextureIndex, symbol])
+  }, [state.dir, playerTextureIndex, symbol]);
 
   useEffect(() => {
     if (path && pathIndex < path.length - 1) {
-      const nextPos = path[pathIndex + 1]
-      const xDist = nextPos.x - pos.x
-      const yDist = nextPos.y - pos.y
+      const nextPos = path[pathIndex + 1];
+      const xDist = nextPos.x - pos.x;
+      const yDist = nextPos.y - pos.y;
       const dirUpdate =
         xDist > 0
           ? 'SE'
@@ -124,13 +124,13 @@ export const Player = ({
           ? 'SW'
           : yDist < 0
           ? 'NE'
-          : state.dir
+          : state.dir;
 
       if (state.dir !== dirUpdate) {
-        dispatch(updateDir(dirUpdate))
+        dispatch(updateDir(dirUpdate));
       }
     }
-  }, [dispatch, path, pathIndex, pos, state.dir])
+  }, [dispatch, path, pathIndex, pos, state.dir]);
 
   return (
     <StyledPlayer
@@ -142,5 +142,5 @@ export const Player = ({
         <StyledPlayerTexture texturePos={texturePos} />
       )}
     </StyledPlayer>
-  )
-}
+  );
+};

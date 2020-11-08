@@ -1,17 +1,18 @@
-import { useState, useEffect } from 'react'
-import styled from 'styled-components'
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { Pos } from '~/types';
 
-const tiles = '/assets/basic.png'
+const tiles = '/assets/basic.png';
 
 const StyledEntity = styled.div`
   width: 100%;
   height: 100%;
 
   position: absolute;
-`
+`;
 
 // TODO: Share styled component with Tile
-const StyledEntityTexture = styled.div`
+const StyledEntityTexture = styled.div<{ texturePos: Pos }>`
   width: 100%;
   height: 100%;
 
@@ -29,10 +30,15 @@ const StyledEntityTexture = styled.div`
   left: -32px;
 
   transform: rotateZ(-45deg) rotateY(-60deg) scale(2.9);
-`
+`;
 
-export const Entity = ({ mapTextureIndex, symbol }) => {
-  const [texturePos, setTexturePos] = useState(null)
+interface EntityProps {
+  mapTextureIndex: any;
+  symbol: string;
+}
+
+export const Entity: React.FC<EntityProps> = ({ mapTextureIndex, symbol }) => {
+  const [texturePos, setTexturePos] = useState<Pos | null>(null);
 
   // Get background position for texture
   useEffect(() => {
@@ -41,19 +47,19 @@ export const Entity = ({ mapTextureIndex, symbol }) => {
       const entityTexture =
         mapTextureIndex[symbol][
           Math.floor(Math.random() * mapTextureIndex[symbol].length)
-        ]
+        ];
       const texturePosUpdate = {
         xPos: entityTexture.xPos,
         yPos: entityTexture.yPos,
-      }
+      };
 
-      setTexturePos(texturePosUpdate)
+      setTexturePos(texturePosUpdate);
     }
-  }, [mapTextureIndex, symbol])
+  }, [mapTextureIndex, symbol]);
 
   return (
     <StyledEntity>
       {texturePos && <StyledEntityTexture texturePos={texturePos} />}
     </StyledEntity>
-  )
-}
+  );
+};

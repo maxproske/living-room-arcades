@@ -10,6 +10,7 @@ import { useEntities } from '../hooks/useEntities';
 import { useMap } from '../hooks/useMap';
 import { useGameStatus } from '../hooks/useGameStatus';
 import { usePlayer } from '../hooks/usePlayer';
+import { useTiledMap } from '~/hooks/useTiledMap';
 
 // Placeholder level
 const level1 = '/maps/level1.txt';
@@ -26,18 +27,27 @@ const StyledGameWrapper = styled.div`
 `;
 
 export const Game: React.FC = () => {
+  const {
+    mapWidth,
+    mapHeight,
+    tileWidth,
+    tileHeight,
+    tilelayers,
+    tilesets,
+    getTilesetIndexAtPos,
+  } = useTiledMap();
   const [frames, tick] = useGameStatus();
   const [entities, setEntities] = useEntities(level1Entities);
   const [player, setPlayer, playerTextureIndex] = usePlayer(playerTextureFile);
-  const [
-    map,
-    setMap,
-    mapTextureIndex,
-    handleTileClick,
-    playerPath,
-    handleWalkEnd,
-    playerPathIndex,
-  ] = useMap(level1, level1TextureFile, entities, player, setPlayer);
+  // const [
+  //   map,
+  //   setMap,
+  //   mapTextureIndex,
+  //   handleTileClick,
+  //   playerPath,
+  //   handleWalkEnd,
+  //   playerPathIndex,
+  // ] = useMap(level1, level1TextureFile, entities, player, setPlayer);
 
   const handleKeyDown = ({ keyCode }: any) => {
     console.log(`keyCode ${keyCode} down`);
@@ -62,13 +72,20 @@ export const Game: React.FC = () => {
       onKeyUp={handleKeyUp}
     >
       <Map
-        map={map}
-        mapTextureIndex={mapTextureIndex}
-        playerTextureIndex={playerTextureIndex}
-        handleTileClick={handleTileClick}
-        playerPath={playerPath}
-        handleWalkEnd={handleWalkEnd}
-        playerPathIndex={playerPathIndex}
+        mapWidth={mapWidth}
+        mapHeight={mapHeight}
+        tileWidth={tileWidth}
+        tileHeight={tileHeight}
+        tilelayers={tilelayers}
+        tilesets={tilesets}
+        getTilesetIndexAtPos={getTilesetIndexAtPos}
+        // playerTextureIndex={playerTextureIndex}
+        // map={map}
+        // mapTextureIndex={mapTextureIndex}
+        // handleTileClick={handleTileClick}
+        // playerPath={playerPath}
+        // handleWalkEnd={handleWalkEnd}
+        // playerPathIndex={playerPathIndex}
       />
     </StyledGameWrapper>
   );

@@ -1,13 +1,12 @@
 import { useState, useEffect, memo } from 'react';
 import styled from 'styled-components';
+import { TiledLayerTilelayer, TiledTileset } from 'tiled-types';
 
 // Components
 import { Entity } from './Entity';
 import { Player } from './Player';
 
 import { Pos } from '~/types';
-
-const tiles = '/assets/basic.png';
 
 const StyledTile = styled.div<{ depth: number }>`
   background-color: rgba(255, 100, 100, 0);
@@ -22,8 +21,9 @@ const StyledTile = styled.div<{ depth: number }>`
 `;
 
 const StyledTileTexture = styled.div<{
-  texturePos: Pos;
   isInPlayerPath: boolean;
+  tileset: string;
+  texturePos: any;
 }>`
   width: 100%;
   height: 100%;
@@ -31,8 +31,8 @@ const StyledTileTexture = styled.div<{
 
   pointer-events: none; /* Hover grid entities, not 96x96 child */
 
-  background: url(${tiles});
-  background-position: -${({ texturePos }) => texturePos.xPos}px ${({ texturePos }) => texturePos.yPos}px;
+  background: url(${({ tileset }) => tileset});
+  background-position: -${({ texturePos }) => texturePos.x}px ${({ texturePos }) => texturePos.y}px;
   background-repeat: no-repeat;
   image-rendering: pixelated;
   position: relative;
@@ -44,102 +44,88 @@ const StyledTileTexture = styled.div<{
   ${({ isInPlayerPath }) => isInPlayerPath && `filter: brightness(0.5);`}
 `;
 
-interface TileProps {
-  mapTextureIndex: any;
-  playerTextureIndex: any;
-  symbol: any;
-  entities: any;
-  players: any;
-  xPos: any;
-  yPos: any;
-  handleTileClick: any;
-  playerPath: any;
-  handleWalkEnd: any;
-  playerPathIndex: any;
-}
-
 /* eslint-disable react/display-name */
 
 // Note: memo prevents React from re-rendering tile every frame
-export const Tile: React.FC<TileProps> = memo(
+export const Tile: React.FC<any> = memo(
   ({
-    mapTextureIndex,
-    playerTextureIndex,
-    symbol,
-    entities,
-    players,
-    xPos,
-    yPos,
-    handleTileClick,
-    playerPath,
-    handleWalkEnd,
-    playerPathIndex,
+    x,
+    y,
+    tileWidth,
+    tileHeight,
+    tilelayers,
+    tilesets,
+    getTilesetIndexAtPos,
   }) => {
-    const [texturePos, setTexturePos] = useState<Pos | null>(null);
-    const [isInPlayerPath, setIsInPlayerPath] = useState(false);
+    // const [texturePos, setTexturePos] = useState<Pos | null>(null);
+    // const [isInPlayerPath, setIsInPlayerPath] = useState(false);
 
-    // Check if tile position is in playerPath array
-    useEffect(() => {
-      if (playerPath) {
-        const inPath = playerPath.some(
-          (pos: any) => pos.x === xPos && pos.y === yPos
-        );
-        setIsInPlayerPath(inPath);
-      }
-    }, [playerPath, xPos, yPos]);
+    // // Check if tile position is in playerPath array
+    // useEffect(() => {
+    //   if (playerPath) {
+    //     const inPath = playerPath.some(
+    //       (pos: any) => pos.x === xPos && pos.y === yPos
+    //     );
+    //     setIsInPlayerPath(inPath);
+    //   }
+    // }, [playerPath, xPos, yPos]);
 
-    useEffect(() => {
-      if (entities && entities.length > 0) {
-        console.log(`found entities at (${xPos},${yPos})`);
-      }
-    }, [entities, xPos, yPos]);
+    // useEffect(() => {
+    //   if (entities && entities.length > 0) {
+    //     console.log(`found entities at (${xPos},${yPos})`);
+    //   }
+    // }, [entities, xPos, yPos]);
 
-    // Get background position for texture
-    useEffect(() => {
-      if (mapTextureIndex[symbol]) {
-        // Handle blank tiles
-        if (mapTextureIndex[symbol].length === 0) {
-          const texturePosUpdate: Pos = {
-            xPos: 0,
-            yPos: 0,
-          };
+    // // Get background position for texture
+    // useEffect(() => {
+    //   if (mapTextureIndex[symbol]) {
+    //     // Handle blank tiles
+    //     if (mapTextureIndex[symbol].length === 0) {
+    //       const texturePosUpdate: Pos = {
+    //         xPos: 0,
+    //         yPos: 0,
+    //       };
 
-          setTexturePos(texturePosUpdate);
-          return;
-        }
+    //       setTexturePos(texturePosUpdate);
+    //       return;
+    //     }
 
-        // Get random texture variation
-        const tileTexture =
-          mapTextureIndex[symbol][
-            Math.floor(Math.random() * mapTextureIndex[symbol].length)
-          ];
-        const texturePosUpdate = {
-          xPos: tileTexture.xPos,
-          yPos: tileTexture.yPos,
-        };
+    //     // Get random texture variation
+    //     const tileTexture =
+    //       mapTextureIndex[symbol][
+    //         Math.floor(Math.random() * mapTextureIndex[symbol].length)
+    //       ];
+    //     const texturePosUpdate = {
+    //       xPos: tileTexture.xPos,
+    //       yPos: tileTexture.yPos,
+    //     };
 
-        setTexturePos(texturePosUpdate);
-        return;
-      }
-    }, [symbol, mapTextureIndex]);
+    //     setTexturePos(texturePosUpdate);
+    //     return;
+    //   }
+    // }, [symbol, mapTextureIndex]);
+
+    // const handleClick = () => {
+    //   console.log(`clicked ${xPos},${yPos}`);
+
+    //   const tile = {
+    //     pos: {
+    //       x: xPos,
+    //       y: yPos,
+    //     },
+    //   };
+    //   handleTileClick(tile);
+    // };
 
     const handleClick = () => {
-      console.log(`clicked ${xPos},${yPos}`);
-
-      const tile = {
-        pos: {
-          x: xPos,
-          y: yPos,
-        },
-      };
-      handleTileClick(tile);
+      console.log(`clicked ${x}:${y}`);
     };
 
     // Use z-index to overlap divs correctly in 3d space
     // https://gamedev.stackexchange.com/a/73470
     return (
-      <StyledTile depth={xPos + yPos + 1} onClick={handleClick}>
-        {players &&
+      <StyledTile depth={x + y + 1} onClick={handleClick}>
+        {/* {players &&
           players.map((symbol: string) => (
             <Player
               key={symbol}
@@ -164,7 +150,40 @@ export const Tile: React.FC<TileProps> = memo(
             isInPlayerPath={isInPlayerPath}
             texturePos={texturePos}
           />
-        )}
+        )} */}
+        {tilelayers.map((layer: TiledLayerTilelayer) => {
+          const { data, width, name } = layer;
+          const index = x + y * width;
+          const tilesetIndex = data[index] - 1;
+          const texturePos = {
+            x: tilesetIndex * tileWidth,
+            y: 0,
+          };
+          const tileset = tilesets[0].image;
+
+          switch (name) {
+            case 'default':
+              return (
+                <StyledTileTexture
+                  key={`${name}[${tilesetIndex}]`}
+                  isInPlayerPath={false}
+                  tileset={tileset}
+                  texturePos={texturePos}
+                />
+              );
+            case 'obstacles':
+              return (
+                <Entity
+                  key={`${name}[${tilesetIndex}]`}
+                  tileset={tileset}
+                  texturePos={texturePos}
+                />
+              );
+            default:
+              console.error(`Unsupported tileset name: ${name}`);
+              break;
+          }
+        })}
       </StyledTile>
     );
   }

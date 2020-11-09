@@ -1,4 +1,5 @@
-import { memo } from 'react';
+/* eslint-disable react/display-name */
+import { memo, useCallback } from 'react';
 import styled from 'styled-components';
 
 import { Tile } from './Tile';
@@ -23,59 +24,53 @@ const StyledMap = styled.div<{ rows: number; cols: number }>`
 `;
 
 interface MapProps {
-  map: any;
-  mapTextureIndex: any;
-  playerTextureIndex: any;
-  handleTileClick: any;
-  playerPath: any;
-  handleWalkEnd: any;
-  playerPathIndex: any;
+  mapWidth: any;
+  mapHeight: any;
+  tileWidth: any;
+  tileHeight: any;
+  tilelayers: any;
+  tilesets: any;
+  getTilesetIndexAtPos: any;
 }
-
-/* eslint-disable react/display-name */
 
 export const Map: React.FC<MapProps> = memo(
   ({
-    map,
-    mapTextureIndex,
-    playerTextureIndex,
-    handleTileClick,
-    playerPath,
-    handleWalkEnd,
-    playerPathIndex,
+    mapWidth,
+    mapHeight,
+    tileWidth,
+    tileHeight,
+    tilelayers,
+    tilesets,
+    getTilesetIndexAtPos,
   }) => {
+    const renderTiles = useCallback(() => {
+      const tiles = [];
+      for (let y = 0; y < mapHeight; y++) {
+        for (let x = 0; x < mapWidth; x++) {
+          tiles.push(
+            <Tile
+              key={`${x}:${y}`}
+              x={x}
+              y={y}
+              tileWidth={tileWidth}
+              tileHeight={tileHeight}
+              tilesets={tilesets}
+              tilelayers={tilelayers}
+              getTilesetIndexAtPos={getTilesetIndexAtPos}
+            />
+          );
+        }
+      }
+
+      return tiles;
+    }, [tilelayers, tilesets]);
+
     return (
-      map &&
-      mapTextureIndex &&
-      playerTextureIndex && (
+      tilelayers &&
+      tilesets && (
         <StyledMapWrapper>
-          <StyledMap rows={map.length} cols={map[0].length}>
-            {map.map((row: any[], y: any) =>
-              row.map(
-                (
-                  tile: { symbol: any; entities: any; players: any },
-                  x: any
-                ) => {
-                  // TODO: Store mapTextureIndex in state instead of prop drilling
-                  return (
-                    <Tile
-                      mapTextureIndex={mapTextureIndex}
-                      playerTextureIndex={playerTextureIndex}
-                      symbol={tile.symbol}
-                      entities={tile.entities}
-                      players={tile.players}
-                      xPos={x}
-                      yPos={y}
-                      key={`${x},${y}`}
-                      handleTileClick={handleTileClick}
-                      playerPath={playerPath}
-                      handleWalkEnd={handleWalkEnd}
-                      playerPathIndex={playerPathIndex}
-                    />
-                  );
-                }
-              )
-            )}
+          <StyledMap rows={mapWidth} cols={mapHeight}>
+            {renderTiles()}
           </StyledMap>
         </StyledMapWrapper>
       )

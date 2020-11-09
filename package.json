@@ -17,11 +17,13 @@
     "*.{js,jsx,ts,tsx}": "eslint --fix --cache"
   },
   "dependencies": {
+    "bresenham": "^0.0.4",
     "next": "10.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "styled-components": "^5.2.1",
-    "styled-normalize": "^8.0.7"
+    "styled-normalize": "^8.0.7",
+    "tiled-types": "^1.1.0"
   },
   "devDependencies": {
     "@types/node": "^14.14.5",

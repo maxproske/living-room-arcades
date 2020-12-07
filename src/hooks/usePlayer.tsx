@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { findPath } from '~/utils/pathing';
 
-export const usePlayer = ({ map }) => {
+export const usePlayer = ({ map }: any) => {
   const [player, setPlayer] = useState<any>(null);
   const [playerTextureIndex, setPlayerTextureIndex] = useState(null);
   const [playerPath, setPlayerPath] = useState<any>(null);

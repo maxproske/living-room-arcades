@@ -76,7 +76,7 @@ export const Tile: React.FC<any> = memo(
     };
 
     const renderPlayers = () => {
-      return players.map((player) => {
+      return players.map((player: any) => {
         const { pos } = player;
         const { x: playerXPos, y: playerYPos } = pos;
         if (x === playerXPos && y === playerYPos) {
@@ -84,10 +84,10 @@ export const Tile: React.FC<any> = memo(
             <Player
               key={`[player][${x},${y}]`}
               pos={pos}
-              playerTextureIndex={playerTextureIndex}
-              playerPath={playerPath}
               handleWalkEnd={handleWalkEnd}
               playerPathIndex={playerPathIndex}
+              playerTextureIndex={playerTextureIndex}
+              playerPath={playerPath}
             />
           );
         }

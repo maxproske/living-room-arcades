@@ -75,16 +75,14 @@ const StyledPlayerTexture = styled.div<{ texturePos: Pos }>`
 `;
 
 interface PlayerProps {
-  symbol: any;
-  path: any;
   pos: any;
   handleWalkEnd: any;
-  pathIndex: any;
+  playerPathIndex: any;
+  playerTextureIndex: any;
+  playerPath: any;
 }
 
 export const Player: React.FC<PlayerProps> = ({
-  symbol,
-  path,
   pos,
   handleWalkEnd,
   playerPathIndex,
@@ -106,7 +104,7 @@ export const Player: React.FC<PlayerProps> = ({
 
       setTexturePos(texturePosUpdate);
     }
-  }, [state.dir, playerTextureIndex, symbol]);
+  }, [state.dir, playerTextureIndex]);
 
   useEffect(() => {
     if (playerPath && playerPathIndex < playerPath.length - 1) {

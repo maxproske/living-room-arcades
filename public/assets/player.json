@@ -1,0 +1,26 @@
+[
+  {
+    "direction": "SW",
+    "x": 0,
+    "y": 0,
+    "numAnimations": 1
+  },
+  {
+    "direction": "NW",
+    "x": 1,
+    "y": 0,
+    "numAnimations": 1
+  },
+  {
+    "direction": "NE",
+    "x": 2,
+    "y": 0,
+    "numAnimations": 1
+  },
+  {
+    "direction": "SE",
+    "x": 3,
+    "y": 0,
+    "numAnimations": 1
+  }
+]

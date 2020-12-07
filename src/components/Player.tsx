@@ -6,8 +6,6 @@ import { updateDir } from '../stores/userActions';
 
 import { Pos } from '~/types';
 
-const sprites = '/assets/player.png';
-
 const walkAnimations: any = {
   SE: keyframes`
   0% {
@@ -64,7 +62,7 @@ const StyledPlayerTexture = styled.div<{ texturePos: Pos }>`
 
   pointer-events: none; /* Hover grid entities, not 96x96 child */
 
-  background: url(${sprites});
+  background: url('/assets/player.png');
   background-position: -${({ texturePos }) => texturePos.xPos}px ${({ texturePos }) => texturePos.yPos}px;
   background-repeat: no-repeat;
   image-rendering: pixelated;
@@ -77,7 +75,6 @@ const StyledPlayerTexture = styled.div<{ texturePos: Pos }>`
 `;
 
 interface PlayerProps {
-  playerTextureIndex: any;
   symbol: any;
   path: any;
   pos: any;
@@ -86,12 +83,13 @@ interface PlayerProps {
 }
 
 export const Player: React.FC<PlayerProps> = ({
-  playerTextureIndex,
   symbol,
   path,
   pos,
   handleWalkEnd,
-  pathIndex,
+  playerPathIndex,
+  playerTextureIndex,
+  playerPath,
 }) => {
   const { state, dispatch } = useUser();
   const [texturePos, setTexturePos] = useState<Pos | null>(null);
@@ -111,8 +109,9 @@ export const Player: React.FC<PlayerProps> = ({
   }, [state.dir, playerTextureIndex, symbol]);
 
   useEffect(() => {
-    if (path && pathIndex < path.length - 1) {
-      const nextPos = path[pathIndex + 1];
+    if (playerPath && playerPathIndex < playerPath.length - 1) {
+      const nextPos = playerPath[playerPathIndex + 1];
+
       const xDist = nextPos.x - pos.x;
       const yDist = nextPos.y - pos.y;
       const dirUpdate =
@@ -130,11 +129,11 @@ export const Player: React.FC<PlayerProps> = ({
         dispatch(updateDir(dirUpdate));
       }
     }
-  }, [dispatch, path, pathIndex, pos, state.dir]);
+  }, [dispatch, playerPath, playerPathIndex, pos, state.dir]);
 
   return (
     <StyledPlayer
-      isWalking={path && pathIndex < path.length - 1}
+      isWalking={playerPath && playerPathIndex < playerPath.length - 1}
       walkAnimation={walkAnimations[state.dir]}
       onAnimationEnd={handleWalkEnd}
     >

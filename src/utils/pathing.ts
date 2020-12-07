@@ -19,8 +19,6 @@ export const findPath = (level: any, start: any, goal: any) => {
     [frontier, current] = pqPop(frontier); // Get starting node from the beginning of it
     const currentKey: any = JSON.stringify(current);
 
-    console.log('frontier', frontier);
-
     // We can't directly compare objects, so compare their properties
     if (current.x === goal.x && current.y === goal.y) {
       // Reverse slice
@@ -97,7 +95,10 @@ const canWalk = (level: any, pos: any) => {
   }
 
   const tile = level[pos.y][pos.x];
-  if (tile.symbol !== '.') {
+  if (tile.walkable === 0) {
+    return false;
+  }
+  if (tile.obstacles !== 0) {
     return false;
   }
 

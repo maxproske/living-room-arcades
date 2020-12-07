@@ -24,6 +24,7 @@ const StyledMap = styled.div<{ rows: number; cols: number }>`
 `;
 
 interface MapProps {
+  map: any;
   mapWidth: any;
   mapHeight: any;
   tileWidth: any;
@@ -31,10 +32,17 @@ interface MapProps {
   tilelayers: any;
   tilesets: any;
   getTilesetIndexAtPos: any;
+  players: any;
+  handleWalkEnd: any;
+  playerTextureIndex: any;
+  handleTileClick: any;
+  playerPathIndex: any;
+  playerPath: any;
 }
 
 export const Map: React.FC<MapProps> = memo(
   ({
+    map,
     mapWidth,
     mapHeight,
     tileWidth,
@@ -42,35 +50,72 @@ export const Map: React.FC<MapProps> = memo(
     tilelayers,
     tilesets,
     getTilesetIndexAtPos,
+    players,
+    handleWalkEnd,
+    handleTileClick,
+    playerTextureIndex,
+    playerPathIndex,
+    playerPath,
   }) => {
-    const renderTiles = useCallback(() => {
-      const tiles = [];
-      for (let y = 0; y < mapHeight; y++) {
-        for (let x = 0; x < mapWidth; x++) {
-          tiles.push(
-            <Tile
-              key={`${x}:${y}`}
-              x={x}
-              y={y}
-              tileWidth={tileWidth}
-              tileHeight={tileHeight}
-              tilesets={tilesets}
-              tilelayers={tilelayers}
-              getTilesetIndexAtPos={getTilesetIndexAtPos}
-            />
-          );
-        }
-      }
+    // const renderTiles = useCallback(() => {
+    //   map.map((row: any[], y: any) =>
+    //           row.map(
+    //             (
+    //               tile: { symbol: any; entities: any; players: any },
+    //               x: any
+    //             ) => {
+    //               // TODO: Store mapTextureIndex in state instead of prop drilling
+    //               return (
+    //         <Tile
+    //           mapTextureIndexes={map[y][x]}
+    //           key={`${x}:${y}`}
+    //           x={x}
+    //           y={y}
+    //           tileWidth={tileWidth}
+    //           tileHeight={tileHeight}
+    //           tilesets={tilesets}
+    //           tilelayers={tilelayers}
+    //           getTilesetIndexAtPos={getTilesetIndexAtPos}
+    //           players={players}
+    //           playerTextureIndex={playerTextureIndex}
+    //           handleTileClick={handleTileClick}
+    //         />
+    //       );
+    //     }
+    //   }
 
-      return tiles;
-    }, [tilelayers, tilesets]);
+    //   return tiles;
+    // }, [tilelayers, tilesets, players, playerTextureIndex, map]);
 
     return (
       tilelayers &&
       tilesets && (
         <StyledMapWrapper>
           <StyledMap rows={mapWidth} cols={mapHeight}>
-            {renderTiles()}
+            {map.map((row: any[], y: any) =>
+              row.map((cell: any, x: any) => {
+                // TODO: Store mapTextureIndex in state instead of prop drilling
+                return (
+                  <Tile
+                    mapTextureIndexes={map[y][x]}
+                    key={`${x}:${y}`}
+                    x={x}
+                    y={y}
+                    tileWidth={tileWidth}
+                    tileHeight={tileHeight}
+                    tilesets={tilesets}
+                    tilelayers={tilelayers}
+                    getTilesetIndexAtPos={getTilesetIndexAtPos}
+                    players={players}
+                    playerTextureIndex={playerTextureIndex}
+                    handleTileClick={handleTileClick}
+                    handleWalkEnd={handleWalkEnd}
+                    playerPathIndex={playerPathIndex}
+                    playerPath={playerPath}
+                  />
+                );
+              })
+            )}
           </StyledMap>
         </StyledMapWrapper>
       )

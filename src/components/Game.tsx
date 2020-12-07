@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 
 // Components
@@ -6,19 +6,10 @@ import { Map } from './Map';
 
 // Custom hooks
 import { useInterval } from '../hooks/useInterval';
-import { useEntities } from '../hooks/useEntities';
-import { useMap } from '../hooks/useMap';
+
 import { useGameStatus } from '../hooks/useGameStatus';
 import { usePlayer } from '../hooks/usePlayer';
 import { useTiledMap } from '~/hooks/useTiledMap';
-
-// Placeholder level
-const level1 = '/maps/level1.txt';
-const level1Entities = '/maps/entities.json';
-const level1TextureFile = '/assets/basic-index.txt';
-
-// Placeholder player
-const playerTextureFile = '/assets/player-index.txt';
 
 const StyledGameWrapper = styled.div`
   width: 100vw;
@@ -27,6 +18,8 @@ const StyledGameWrapper = styled.div`
 `;
 
 export const Game: React.FC = () => {
+  const [map, setMap] = useState(null);
+
   const {
     mapWidth,
     mapHeight,
@@ -37,25 +30,21 @@ export const Game: React.FC = () => {
     getTilesetIndexAtPos,
   } = useTiledMap();
   const [frames, tick] = useGameStatus();
-  const [entities, setEntities] = useEntities(level1Entities);
-  const [player, setPlayer, playerTextureIndex] = usePlayer(playerTextureFile);
-  // const [
-  //   map,
-  //   setMap,
-  //   mapTextureIndex,
-  //   handleTileClick,
-  //   playerPath,
-  //   handleWalkEnd,
-  //   playerPathIndex,
-  // ] = useMap(level1, level1TextureFile, entities, player, setPlayer);
+  const {
+    player,
+    setPlayer,
+    playerTextureIndex,
+    handleTileClick,
+    handleWalkEnd,
+    playerPathIndex,
+    playerPath,
+  } = usePlayer({
+    map,
+  });
 
-  const handleKeyDown = ({ keyCode }: any) => {
-    console.log(`keyCode ${keyCode} down`);
-  };
+  const handleKeyDown = ({ keyCode }: any) => {};
 
-  const handleKeyUp = ({ keyCode }: any) => {
-    console.log(`keyCode ${keyCode} up`);
-  };
+  const handleKeyUp = ({ keyCode }: any) => {};
 
   // Game loop
   useInterval(() => {
@@ -63,6 +52,43 @@ export const Game: React.FC = () => {
   }, 1000);
 
   console.log('Rendered Game');
+
+  useEffect(() => {
+    if (!mapHeight) {
+      return;
+    }
+
+    if (!mapWidth) {
+      return;
+    }
+
+    if (!tilelayers) {
+      return;
+    }
+
+    if (!player) {
+      return;
+    }
+
+    // Add default and obstacle tiles to map
+    const mapUpdate: any = [];
+    for (let y = 0; y < mapHeight; y++) {
+      mapUpdate[y] = [];
+      for (let x = 0; x < mapWidth; x++) {
+        const pos = { x, y };
+        mapUpdate[y][x] = {
+          walkable: getTilesetIndexAtPos(tilelayers[1], pos),
+          obstacles: getTilesetIndexAtPos(tilelayers[0], pos),
+          players: [],
+        };
+      }
+    }
+
+    // Add player to map
+    mapUpdate[player.pos.y][player.pos.x].players.push(player);
+
+    setMap(mapUpdate);
+  }, [mapHeight, mapWidth, tilelayers, player]);
 
   // Note: Without the role attribute, you would have to click the map for inputs to register
   return (
@@ -72,6 +98,7 @@ export const Game: React.FC = () => {
       onKeyUp={handleKeyUp}
     >
       <Map
+        map={map}
         mapWidth={mapWidth}
         mapHeight={mapHeight}
         tileWidth={tileWidth}
@@ -79,13 +106,12 @@ export const Game: React.FC = () => {
         tilelayers={tilelayers}
         tilesets={tilesets}
         getTilesetIndexAtPos={getTilesetIndexAtPos}
-        // playerTextureIndex={playerTextureIndex}
-        // map={map}
-        // mapTextureIndex={mapTextureIndex}
-        // handleTileClick={handleTileClick}
-        // playerPath={playerPath}
-        // handleWalkEnd={handleWalkEnd}
-        // playerPathIndex={playerPathIndex}
+        players={[player]}
+        playerTextureIndex={playerTextureIndex}
+        handleTileClick={handleTileClick}
+        handleWalkEnd={handleWalkEnd}
+        playerPathIndex={playerPathIndex}
+        playerPath={playerPath}
       />
     </StyledGameWrapper>
   );

@@ -1,4 +1,5 @@
-import { memo } from 'react';
+/* eslint-disable react/display-name */
+import { memo, useCallback } from 'react';
 import styled from 'styled-components';
 
 import { Tile } from './Tile';
@@ -24,57 +25,96 @@ const StyledMap = styled.div<{ rows: number; cols: number }>`
 
 interface MapProps {
   map: any;
-  mapTextureIndex: any;
+  mapWidth: any;
+  mapHeight: any;
+  tileWidth: any;
+  tileHeight: any;
+  tilelayers: any;
+  tilesets: any;
+  getTilesetIndexAtPos: any;
+  players: any;
+  handleWalkEnd: any;
   playerTextureIndex: any;
   handleTileClick: any;
-  playerPath: any;
-  handleWalkEnd: any;
   playerPathIndex: any;
+  playerPath: any;
 }
-
-/* eslint-disable react/display-name */
 
 export const Map: React.FC<MapProps> = memo(
   ({
     map,
-    mapTextureIndex,
-    playerTextureIndex,
-    handleTileClick,
-    playerPath,
+    mapWidth,
+    mapHeight,
+    tileWidth,
+    tileHeight,
+    tilelayers,
+    tilesets,
+    getTilesetIndexAtPos,
+    players,
     handleWalkEnd,
+    handleTileClick,
+    playerTextureIndex,
     playerPathIndex,
+    playerPath,
   }) => {
+    // const renderTiles = useCallback(() => {
+    //   map.map((row: any[], y: any) =>
+    //           row.map(
+    //             (
+    //               tile: { symbol: any; entities: any; players: any },
+    //               x: any
+    //             ) => {
+    //               // TODO: Store mapTextureIndex in state instead of prop drilling
+    //               return (
+    //         <Tile
+    //           mapTextureIndexes={map[y][x]}
+    //           key={`${x}:${y}`}
+    //           x={x}
+    //           y={y}
+    //           tileWidth={tileWidth}
+    //           tileHeight={tileHeight}
+    //           tilesets={tilesets}
+    //           tilelayers={tilelayers}
+    //           getTilesetIndexAtPos={getTilesetIndexAtPos}
+    //           players={players}
+    //           playerTextureIndex={playerTextureIndex}
+    //           handleTileClick={handleTileClick}
+    //         />
+    //       );
+    //     }
+    //   }
+
+    //   return tiles;
+    // }, [tilelayers, tilesets, players, playerTextureIndex, map]);
+
     return (
-      map &&
-      mapTextureIndex &&
-      playerTextureIndex && (
+      tilelayers &&
+      tilesets && (
         <StyledMapWrapper>
-          <StyledMap rows={map.length} cols={map[0].length}>
+          <StyledMap rows={mapWidth} cols={mapHeight}>
             {map.map((row: any[], y: any) =>
-              row.map(
-                (
-                  tile: { symbol: any; entities: any; players: any },
-                  x: any
-                ) => {
-                  // TODO: Store mapTextureIndex in state instead of prop drilling
-                  return (
-                    <Tile
-                      mapTextureIndex={mapTextureIndex}
-                      playerTextureIndex={playerTextureIndex}
-                      symbol={tile.symbol}
-                      entities={tile.entities}
-                      players={tile.players}
-                      xPos={x}
-                      yPos={y}
-                      key={`${x},${y}`}
-                      handleTileClick={handleTileClick}
-                      playerPath={playerPath}
-                      handleWalkEnd={handleWalkEnd}
-                      playerPathIndex={playerPathIndex}
-                    />
-                  );
-                }
-              )
+              row.map((cell: any, x: any) => {
+                // TODO: Store mapTextureIndex in state instead of prop drilling
+                return (
+                  <Tile
+                    mapTextureIndexes={map[y][x]}
+                    key={`${x}:${y}`}
+                    x={x}
+                    y={y}
+                    tileWidth={tileWidth}
+                    tileHeight={tileHeight}
+                    tilesets={tilesets}
+                    tilelayers={tilelayers}
+                    getTilesetIndexAtPos={getTilesetIndexAtPos}
+                    players={players}
+                    playerTextureIndex={playerTextureIndex}
+                    handleTileClick={handleTileClick}
+                    handleWalkEnd={handleWalkEnd}
+                    playerPathIndex={playerPathIndex}
+                    playerPath={playerPath}
+                  />
+                );
+              })
             )}
           </StyledMap>
         </StyledMapWrapper>

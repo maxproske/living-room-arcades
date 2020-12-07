@@ -2,7 +2,7 @@ import { IUserState } from '~/stores/UserProvider';
 import { UserActions } from '~/stores/userActions';
 
 export const initialUserState: IUserState = {
-  dir: 'SE',
+  dir: 'NW',
 };
 
 export const userReducer = (

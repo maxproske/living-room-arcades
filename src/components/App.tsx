@@ -1,16 +1,5 @@
-import { ThemeProvider } from 'styled-components';
-
-import { Game } from './Game';
-
-const theme = {
-  primary: '#642002',
-  secondary: '#dd2211',
-};
+import { GameClient } from '~/components/GameClient';
 
 export const App: React.FC = () => {
-  return (
-    <ThemeProvider theme={theme}>
-      <Game />
-    </ThemeProvider>
-  );
+  return <GameClient numPlayers={1} />;
 };

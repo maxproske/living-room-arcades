@@ -1,3 +1,4 @@
+import { BoardProps } from 'boardgame.io/react';
 import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 
@@ -6,10 +7,12 @@ import { Map } from './Map';
 
 // Custom hooks
 import { useInterval } from '../hooks/useInterval';
-
 import { useGameStatus } from '../hooks/useGameStatus';
 import { usePlayer } from '../hooks/usePlayer';
 import { useTiledMap } from '~/hooks/useTiledMap';
+
+// Types
+import { GameState } from '~/types/GameState';
 
 const StyledGameWrapper = styled.div`
   width: 100vw;
@@ -17,7 +20,11 @@ const StyledGameWrapper = styled.div`
   overflow: hidden;
 `;
 
-export const Game: React.FC = () => {
+export const GameBoard: React.FC<BoardProps<GameState>> = ({
+  ctx,
+  G,
+  moves,
+}) => {
   const [map, setMap] = useState(null);
 
   const {
@@ -40,6 +47,7 @@ export const Game: React.FC = () => {
     playerPath,
   } = usePlayer({
     map,
+    moves,
   });
 
   const handleKeyDown = ({ keyCode }: any) => {};

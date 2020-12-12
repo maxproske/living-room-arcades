@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { findPath } from '~/utils/pathing';
 
-export const usePlayer = ({ map }: any) => {
+export const usePlayer = ({ map, moves }: any) => {
   const [player, setPlayer] = useState<any>(null);
   const [playerTextureIndex, setPlayerTextureIndex] = useState(null);
   const [playerPath, setPlayerPath] = useState<any>(null);
@@ -62,6 +62,9 @@ export const usePlayer = ({ map }: any) => {
       setPlayerPath(playerPathUpdate);
       setPlayerPathIndex(0);
       setIsWalking(true);
+
+      // boardgame.io stuff
+      moves.updateDestinationPos(endPos);
     },
     [map, player]
   );
@@ -70,6 +73,9 @@ export const usePlayer = ({ map }: any) => {
     if (playerPathIndex < playerPath.length) {
       const playerPathIndexUpdate = playerPathIndex + 1;
       const nextPos = playerPath[playerPathIndexUpdate];
+
+      // boardgame.io stuff
+      moves.updateMyPos(nextPos);
 
       // This is disgusting
       if (nextPos) {

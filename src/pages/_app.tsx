@@ -1,16 +1,14 @@
 import { AppProps } from 'next/app';
-import { ThemeProvider } from 'styled-components';
+
+import { ManagedContext } from '~/stores/Context';
 import { GlobalStyle } from '~/components/GlobalStyle';
-import { UserProvider } from '~/stores/UserProvider';
 
 const App = ({ Component, pageProps }: AppProps): JSX.Element => {
   return (
-    <ThemeProvider theme={{}}>
-      <UserProvider>
-        <Component {...pageProps} />
-        <GlobalStyle />
-      </UserProvider>
-    </ThemeProvider>
+    <ManagedContext>
+      <Component {...pageProps} />
+      <GlobalStyle />
+    </ManagedContext>
   );
 };
 

@@ -10,6 +10,7 @@ import { useInterval } from '../hooks/useInterval';
 import { useGameStatus } from '../hooks/useGameStatus';
 import { usePlayer } from '../hooks/usePlayer';
 import { useTiledMap } from '~/hooks/useTiledMap';
+import { useGame } from '../hooks/useGame';
 
 // Types
 import { GameState } from '~/types/GameState';
@@ -48,6 +49,10 @@ export const GameBoard: React.FC<BoardProps<GameState>> = ({
   } = usePlayer({
     map,
     moves,
+  });
+  const { game, GameClient, handleClick } = useGame({
+    mapWidth,
+    mapHeight,
   });
 
   const handleKeyDown = ({ keyCode }: any) => {};
@@ -100,27 +105,30 @@ export const GameBoard: React.FC<BoardProps<GameState>> = ({
 
   // Note: Without the role attribute, you would have to click the map for inputs to register
   return (
-    <StyledGameWrapper
-      role="button"
-      onKeyDown={handleKeyDown}
-      onKeyUp={handleKeyUp}
-    >
-      <Map
-        map={map}
-        mapWidth={mapWidth}
-        mapHeight={mapHeight}
-        tileWidth={tileWidth}
-        tileHeight={tileHeight}
-        tilelayers={tilelayers}
-        tilesets={tilesets}
-        getTilesetIndexAtPos={getTilesetIndexAtPos}
-        players={[player]}
-        playerTextureIndex={playerTextureIndex}
-        handleTileClick={handleTileClick}
-        handleWalkEnd={handleWalkEnd}
-        playerPathIndex={playerPathIndex}
-        playerPath={playerPath}
-      />
-    </StyledGameWrapper>
+    game !== null && (
+      <StyledGameWrapper
+        role="button"
+        onKeyDown={handleKeyDown}
+        onKeyUp={handleKeyUp}
+      >
+        <Map
+          map={map}
+          mapWidth={mapWidth}
+          mapHeight={mapHeight}
+          tileWidth={tileWidth}
+          tileHeight={tileHeight}
+          tilelayers={tilelayers}
+          tilesets={tilesets}
+          getTilesetIndexAtPos={getTilesetIndexAtPos}
+          players={[player]}
+          playerTextureIndex={playerTextureIndex}
+          handleTileClick={handleTileClick}
+          handleWalkEnd={handleWalkEnd}
+          playerPathIndex={playerPathIndex}
+          playerPath={playerPath}
+        />
+        <GameClient />
+      </StyledGameWrapper>
+    )
   );
 };

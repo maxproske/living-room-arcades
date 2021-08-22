@@ -1,13 +1,16 @@
 import { Client } from 'boardgame.io/react';
 import { SocketIO } from 'boardgame.io/multiplayer';
+
+// Components
 import { GameBoard } from './GameBoard';
 
+// Utils
 import { createGame } from '~/utils/gameHelpers';
 
-export const GameClient = ({ numPlayers }: any): any => {
+export const GameClient = ({ playerID, matchID, credentials }): any => {
   const GameClient = Client({
-    game: createGame(numPlayers),
-    numPlayers,
+    game: createGame(1),
+    numPlayers: 1,
     board: GameBoard,
     debug: true,
     multiplayer: SocketIO({
@@ -15,5 +18,11 @@ export const GameClient = ({ numPlayers }: any): any => {
     }),
   });
 
-  return <GameClient />;
+  return (
+    <GameClient
+      playerID={playerID}
+      matchID={matchID}
+      credentials={credentials}
+    />
+  );
 };

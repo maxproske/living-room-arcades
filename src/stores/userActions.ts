@@ -1,7 +1,6 @@
 export enum ActionType {
   UpdateDir = 'UPDATE_DIR',
 }
-
 interface IUpdateDir {
   type: ActionType.UpdateDir;
   dir: string;

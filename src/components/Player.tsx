@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useUser } from '../stores/UserProvider';
@@ -5,6 +6,11 @@ import { useUser } from '../stores/UserProvider';
 import { updateDir } from '../stores/userActions';
 
 import { Pos } from '~/types';
+
+// Web components cannot be parsed SSR, as the DOM API isn't available
+const PlayerWC = dynamic(() => import('~/components/webcomponents/Player'), {
+  ssr: false,
+});
 
 const walkAnimations: any = {
   SE: keyframes`
@@ -37,7 +43,10 @@ const walkAnimations: any = {
   }`,
 };
 
-const StyledPlayer = styled.div<{ isWalking: boolean; walkAnimation: any }>`
+const StyledPlayer = styled.div<{
+  isWalking: boolean;
+  walkAnimation: any;
+}>`
   width: 43px;
   height: 70px;
 
@@ -130,14 +139,16 @@ export const Player: React.FC<PlayerProps> = ({
   }, [dispatch, playerPath, playerPathIndex, pos, state.dir]);
 
   return (
-    <StyledPlayer
-      isWalking={playerPath && playerPathIndex < playerPath.length - 1}
-      walkAnimation={walkAnimations[state.dir]}
-      onAnimationEnd={handleWalkEnd}
-    >
-      {state.dir && texturePos && (
-        <StyledPlayerTexture texturePos={texturePos} />
-      )}
-    </StyledPlayer>
+    <PlayerWC>
+      <StyledPlayer
+        isWalking={playerPath && playerPathIndex < playerPath.length - 1}
+        walkAnimation={walkAnimations[state.dir]}
+        onAnimationEnd={handleWalkEnd}
+      >
+        {state.dir && texturePos && (
+          <StyledPlayerTexture texturePos={texturePos} />
+        )}
+      </StyledPlayer>
+    </PlayerWC>
   );
 };

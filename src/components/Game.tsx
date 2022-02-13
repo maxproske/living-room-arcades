@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 
 // Components
 import { Map } from './Map';
+import { ContextMenu } from '~/components/ContextMenu';
 
 // Custom hooks
 import { useInterval } from '../hooks/useInterval';
@@ -18,6 +19,7 @@ const StyledGameWrapper = styled.div`
 `;
 
 export const Game: React.FC = () => {
+  const gameRef = useRef(null);
   const [map, setMap] = useState(null);
 
   const {
@@ -93,9 +95,11 @@ export const Game: React.FC = () => {
   // Note: Without the role attribute, you would have to click the map for inputs to register
   return (
     <StyledGameWrapper
+      ref={gameRef}
       role="button"
       onKeyDown={handleKeyDown}
       onKeyUp={handleKeyUp}
+      id="game"
     >
       <Map
         map={map}
@@ -113,6 +117,7 @@ export const Game: React.FC = () => {
         playerPathIndex={playerPathIndex}
         playerPath={playerPath}
       />
+      <ContextMenu outerRef={gameRef} />
     </StyledGameWrapper>
   );
 };

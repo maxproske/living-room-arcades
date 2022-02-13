@@ -1,4 +1,4 @@
-import { useState, useEffect, memo } from 'react';
+import { useState, useEffect, memo, useRef } from 'react';
 import styled from 'styled-components';
 import { TiledLayerTilelayer, TiledTileset } from 'tiled-types';
 

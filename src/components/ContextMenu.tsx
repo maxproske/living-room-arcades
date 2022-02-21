@@ -16,6 +16,7 @@ export const ContextMenu = ({ outerRef }) => {
         yPos={yPos}
         isContextMenuVisible={isContextMenuVisible}
       >
+        <StyledTitle>Choose Option</StyledTitle>
         <StyledOptions>
           <StyledOption>{`Examine ${1}`}</StyledOption>
           <StyledOption>Cancel</StyledOption>
@@ -37,7 +38,7 @@ const StyledModal = styled.div`
   position: absolute;
   left: ${({ xPos }) => xPos}px;
   top: ${({ yPos }) => yPos}px;
-  min-width: 8rem;
+  min-width: 10rem;
   min-height: 4rem;
   display: ${({ isContextMenuVisible }) =>
     isContextMenuVisible ? 'block' : 'none'};
@@ -45,13 +46,28 @@ const StyledModal = styled.div`
   background: black;
   color: white;
   border: 1px solid white;
-  padding: 0.5rem;
+`;
+
+const StyledTitle = styled.h3`
+  font-size: 1rem;
+  background-color: black;
+  padding: 0 0.5rem;
+  margin: 0.25rem 0;
 `;
 
 const StyledOptions = styled.ul`
   list-style: none;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-flow: column;
 `;
 
-const StyledOption = styled.li``;
+const StyledOption = styled.li`
+  cursor: pointer;
+  padding: 0.1rem 0.5rem;
+
+  &:hover {
+    background-color: #333;
+  }
+`;

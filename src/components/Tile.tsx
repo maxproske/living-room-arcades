@@ -1,5 +1,5 @@
 import { useState, useEffect, memo, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { TiledLayerTilelayer, TiledTileset } from 'tiled-types';
 
 // Components
@@ -8,16 +8,20 @@ import { Player } from './Player';
 
 import { Pos } from '~/types';
 
-const StyledTile = styled.div<{ depth: number }>`
+const StyledTile = styled.div<{ depth: number; isWalkable: boolean }>`
   background-color: rgba(255, 100, 100, 0);
 
   transition: 0.15s;
   position: relative; /* Allow entities and textures to stack */
 
-  &:hover {
-    filter: brightness(1.2);
-    transition: 0s;
-  }
+  ${({ isWalkable }) =>
+    isWalkable &&
+    css`
+      &:hover {
+        filter: brightness(1.2);
+        transition: 0s;
+      }
+    `}
 `;
 
 const StyledTileTexture = styled.div<{
@@ -138,6 +142,8 @@ export const Tile: React.FC<any> = memo(
       return tiles;
     };
 
+    console.log(`[tile][${x},${y}]`, { mapTextureIndexes });
+
     // Use z-index to overlap divs correctly in 3d space
     // https://gamedev.stackexchange.com/a/73470
     return (
@@ -145,6 +151,7 @@ export const Tile: React.FC<any> = memo(
         key={`[tile][${x},${y}]`}
         depth={x + y + 1}
         onClick={handleClick}
+        isWalkable={mapTextureIndexes.obstacles === 0}
       >
         {renderPlayers()}
         {renderTiles()}

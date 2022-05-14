@@ -1,14 +1,11 @@
-import { useState, useEffect, memo, useRef } from 'react';
-import styled, { css } from 'styled-components';
-import { TiledLayerTilelayer, TiledTileset } from 'tiled-types';
+import { memo } from 'react'
+import styled, { css } from 'styled-components'
 
 // Components
-import { Entity } from './Entity';
-import { Player } from './Player';
+import { Entity } from './Entity'
+import { Player } from './Player'
 
-import { Pos } from '~/types';
-
-const StyledTile = styled.div<{ depth: number; isWalkable: boolean }>`
+const StyledTile = styled.div`
   background-color: rgba(255, 100, 100, 0);
 
   transition: 0.15s;
@@ -22,13 +19,9 @@ const StyledTile = styled.div<{ depth: number; isWalkable: boolean }>`
         transition: 0s;
       }
     `}
-`;
+`
 
-const StyledTileTexture = styled.div<{
-  isInPlayerPath: boolean;
-  tileset: string;
-  texturePos: any;
-}>`
+const StyledTileTexture = styled.div`
   width: 100%;
   height: 100%;
   position: absolute;
@@ -46,12 +39,12 @@ const StyledTileTexture = styled.div<{
   transform: rotateZ(-45deg) rotateY(-60deg) scale(2.9);
 
   ${({ isInPlayerPath }) => isInPlayerPath && `filter: brightness(0.5);`}
-`;
+`
 
 /* eslint-disable react/display-name */
 
 // Note: memo prevents React from re-rendering tile every frame
-export const Tile: React.FC<any> = memo(
+export const Tile = memo(
   ({
     x,
     y,
@@ -68,21 +61,21 @@ export const Tile: React.FC<any> = memo(
     playerPath,
   }) => {
     const handleClick = () => {
-      console.log(`clicked ${x}:${y}`);
+      console.log(`clicked ${x}:${y}`)
 
       const tileClicked = {
         pos: {
           x,
           y,
         },
-      };
-      handleTileClick(tileClicked);
-    };
+      }
+      handleTileClick(tileClicked)
+    }
 
     const renderPlayers = () => {
-      return players.map((player: any) => {
-        const { pos } = player;
-        const { x: playerXPos, y: playerYPos } = pos;
+      return players.map((player) => {
+        const { pos } = player
+        const { x: playerXPos, y: playerYPos } = pos
         if (x === playerXPos && y === playerYPos) {
           return (
             <Player
@@ -93,41 +86,35 @@ export const Tile: React.FC<any> = memo(
               playerTextureIndex={playerTextureIndex}
               playerPath={playerPath}
             />
-          );
+          )
         }
-      });
-    };
+      })
+    }
 
     const renderTiles = () => {
       if (!mapTextureIndexes) {
-        return null;
+        return null
       }
 
-      const { walkable, obstacles, players } = mapTextureIndexes;
+      const { walkable, obstacles, players } = mapTextureIndexes
 
-      const tileset = tilesets[0].image;
-      const tiles = [];
+      const tileset = tilesets[0].image
+      const tiles = []
 
       if (obstacles) {
         const texturePos = {
           x: (obstacles - 1) * tileWidth,
           y: 0,
-        };
+        }
 
-        tiles.push(
-          <Entity
-            key={`[obstacle][${x},${y}]`}
-            tileset={tileset}
-            texturePos={texturePos}
-          />
-        );
+        tiles.push(<Entity key={`[obstacle][${x},${y}]`} tileset={tileset} texturePos={texturePos} />)
       }
 
       if (walkable) {
         const texturePos = {
           x: (walkable - 1) * tileWidth,
           y: 0,
-        };
+        }
 
         tiles.push(
           <StyledTileTexture
@@ -136,13 +123,11 @@ export const Tile: React.FC<any> = memo(
             tileset={tileset}
             texturePos={texturePos}
           />
-        );
+        )
       }
 
-      return tiles;
-    };
-
-    console.log(`[tile][${x},${y}]`, { mapTextureIndexes });
+      return tiles
+    }
 
     // Use z-index to overlap divs correctly in 3d space
     // https://gamedev.stackexchange.com/a/73470
@@ -156,6 +141,6 @@ export const Tile: React.FC<any> = memo(
         {renderPlayers()}
         {renderTiles()}
       </StyledTile>
-    );
+    )
   }
-);
+)

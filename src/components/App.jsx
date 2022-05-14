@@ -1,16 +1,16 @@
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components'
 
-import { Game } from './Game';
+import { Game } from './Game'
 
 const theme = {
   primary: '#642002',
   secondary: '#dd2211',
-};
+}
 
-export const App: React.FC = () => {
+export const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Game />
     </ThemeProvider>
-  );
-};
+  )
+}

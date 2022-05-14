@@ -9,4 +9,8 @@ module.exports = {
     // avif generally take longer to encode, but compress 20% smaller compared to webp
     formats: ['image/avif', 'image/webp'],
   },
-};
+  eslint: {
+    // Allow project to build even if project has ESLint errors
+    ignoreDuringBuilds: true,
+  },
+}

@@ -3,7 +3,7 @@
 // https://www.youtube.com/watch?v=hfa1vqtZ7b0
 
 // Return the new array everytime we push
-export const pqPush = (pq: any, pos: any, priority: any) => {
+export const pqPush = (pq, pos, priority) => {
   const newNode = { pos, priority };
   pq.push(newNode);
 
@@ -22,7 +22,7 @@ export const pqPush = (pq: any, pos: any, priority: any) => {
 };
 
 // Remove something from the queue
-export const pqPop = (pq: any) => {
+export const pqPop = (pq) => {
   const result = pq[0].pos; // Always return the root
   // Replace root with rightmost leaf node
   // up to but not rightmode leaf node. shrink slice by 1
@@ -62,7 +62,7 @@ export const pqPop = (pq: any) => {
   return [pq, result];
 };
 
-const pqSwap = (pq: any, i: any, j: any) => {
+const pqSwap = (pq, i, j) => {
   const tmp = pq[i];
   pq[i] = pq[j];
   pq[j] = tmp;
@@ -71,7 +71,7 @@ const pqSwap = (pq: any, i: any, j: any) => {
 };
 
 // Helper function to get parent node
-const pqParent = (pq: any, i: any) => {
+const pqParent = (pq, i) => {
   const index = Math.floor((i - 1) / 2);
   const priorityPos = pq[index];
 
@@ -79,7 +79,7 @@ const pqParent = (pq: any, i: any) => {
 };
 
 // Helper function to get left children
-const pqLeft = (pq: any, i: any) => {
+const pqLeft = (pq, i) => {
   const index = i * 2 + 1;
   if (index < pq.length) {
     // We have a child
@@ -90,7 +90,7 @@ const pqLeft = (pq: any, i: any) => {
 };
 
 // Helper function to get right children
-const pqRight = (pq: any, i: any) => {
+const pqRight = (pq, i) => {
   const index = i * 2 + 2;
   if (index < pq.length) {
     // We have a child

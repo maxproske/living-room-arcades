@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
-import { findPath } from '~/utils/pathing';
+import { useState, useEffect, useCallback } from "react";
+import { findPath } from "~/utils/pathing";
 
-export const usePlayer = ({ map }: any) => {
-  const [player, setPlayer] = useState<any>(null);
+export const usePlayer = ({ map }) => {
+  const [player, setPlayer] = useState(null);
   const [playerTextureIndex, setPlayerTextureIndex] = useState(null);
-  const [playerPath, setPlayerPath] = useState<any>(null);
-  const [isWalking, setIsWalking] = useState<any>(false);
-  const [playerPathIndex, setPlayerPathIndex] = useState<any>(null);
+  const [playerPath, setPlayerPath] = useState(null);
+  const [isWalking, setIsWalking] = useState(false);
+  const [playerPathIndex, setPlayerPathIndex] = useState(null);
 
   useEffect(() => {
     const fetchPlayer = async () => {
@@ -21,13 +21,13 @@ export const usePlayer = ({ map }: any) => {
     };
 
     const fetchTextureIndex = async () => {
-      const playerTextureIndexUpdate: any = [];
+      const playerTextureIndexUpdate = [];
 
-      const playerDirections = await fetch(
-        '/assets/player.json'
-      ).then((response) => response.json());
+      const playerDirections = await fetch("/assets/player.json").then(
+        (response) => response.json()
+      );
 
-      playerDirections.forEach((playerDirection: any) => {
+      playerDirections.forEach((playerDirection) => {
         const { direction, x, y, numAnimations } = playerDirection;
 
         playerTextureIndexUpdate[direction] = [];

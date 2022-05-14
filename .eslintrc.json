@@ -1,49 +1,12 @@
 {
-  "parser": "@typescript-eslint/parser", // Default parser espree can't parse Typescript
-  "parserOptions": {
-    "project": "./tsconfig.json",
-    "ecmaVersion": 2020,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
-  },
   "env": {
     "browser": true,
-    "node": true,
-    "es6": true
+    "es2021": true,
+    "node": true
   },
   "extends": [
-    "eslint:recommended", // Default ESLint rules
-    "plugin:react/recommended", // React rules
-    "plugin:react-hooks/recommended",
-    "plugin:@typescript-eslint/eslint-recommended", // TypeScript rules
-    "plugin:@typescript-eslint/recommended",
-    "plugin:jsx-a11y/recommended", // Accessibility rules
-    "plugin:prettier/recommended" // Always last
-  ],
-  "plugins": ["@typescript-eslint", "react", "react-hooks", "jsx-a11y"],
-  "rules": {
-    "react/prop-types": "off", // Disable prop-types as TypeScript does type checking
-    "react/react-in-jsx-scope": "off",
-    "@typescript-eslint/no-explicit-any": "off",
-    "prettier/prettier": [
-      "error",
-      {
-        "singleQuote": true,
-        "bracketSpacing": true,
-        "arrowParens": "always",
-        "printWidth": 80,
-        "semi": true,
-        "trailingComma": "es5",
-        "tabWidth": 2,
-        "useTabs": false
-      }
-    ]
-  },
-  "settings": {
-    "react": {
-      "version": "detect" // Tell eslint-plugin-react to autodetect React version
-    }
-  }
+    "eslint:recommended",
+    "next/core-web-vitals",
+    "prettier" // Always last
+  ]
 }

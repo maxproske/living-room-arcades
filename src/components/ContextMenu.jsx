@@ -1,21 +1,17 @@
-import { useState, useEffect, memo, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import styled from 'styled-components';
+import { useRef } from 'react'
+import { createPortal } from 'react-dom'
+import styled from 'styled-components'
 
 // Custom hooks
-import { useContextMenu } from '~/hooks/useContextMenu';
+import { useContextMenu } from '~/hooks/useContextMenu'
 
 export const ContextMenu = ({ outerRef }) => {
-  const contextMenuRef = useRef(null);
-  const { xPos, yPos, isContextMenuVisible } = useContextMenu(outerRef);
+  const contextMenuRef = useRef(null)
+  const { xPos, yPos, isContextMenuVisible } = useContextMenu(outerRef)
 
   return (
     <Portal>
-      <StyledModal
-        xPos={xPos}
-        yPos={yPos}
-        isContextMenuVisible={isContextMenuVisible}
-      >
+      <StyledModal xPos={xPos} yPos={yPos} isContextMenuVisible={isContextMenuVisible}>
         <StyledTitle>Choose Option</StyledTitle>
         <StyledOptions>
           <StyledOption>{`Examine ${1}`}</StyledOption>
@@ -23,15 +19,12 @@ export const ContextMenu = ({ outerRef }) => {
         </StyledOptions>
       </StyledModal>
     </Portal>
-  );
-};
+  )
+}
 
-const Portal: React.FC = ({ children }) => {
-  return (
-    typeof document !== 'undefined' &&
-    createPortal(children, document.querySelector('#game'))
-  );
-};
+const Portal = ({ children }) => {
+  return typeof document !== 'undefined' && createPortal(children, document.querySelector('#game'))
+}
 
 const StyledModal = styled.div`
   z-index: 1000;
@@ -40,20 +33,19 @@ const StyledModal = styled.div`
   top: ${({ yPos }) => yPos}px;
   min-width: 10rem;
   min-height: 4rem;
-  display: ${({ isContextMenuVisible }) =>
-    isContextMenuVisible ? 'block' : 'none'};
+  display: ${({ isContextMenuVisible }) => (isContextMenuVisible ? 'block' : 'none')};
 
   background: black;
   color: white;
   border: 1px solid white;
-`;
+`
 
 const StyledTitle = styled.h3`
   font-size: 1rem;
   background-color: black;
   padding: 0 0.5rem;
   margin: 0.25rem 0;
-`;
+`
 
 const StyledOptions = styled.ul`
   list-style: none;
@@ -61,7 +53,7 @@ const StyledOptions = styled.ul`
   padding: 0;
   display: flex;
   flex-flow: column;
-`;
+`
 
 const StyledOption = styled.li`
   cursor: pointer;
@@ -70,4 +62,4 @@ const StyledOption = styled.li`
   &:hover {
     background-color: #333;
   }
-`;
+`

@@ -1,23 +1,23 @@
-import { pqPush, pqPop } from './pqueue';
+import { pqPush, pqPop } from "./pqueue";
 
 // Astar implementation by Jack Mott
 // translated from Go to JavaScript
 // https://www.youtube.com/watch?v=FESffgzrxJU
-export const findPath = (level: any, start: any, goal: any) => {
-  let frontier: number[] = []; // Growing/shrinking frontier isn't optimal
+export const findPath = (level, start, goal) => {
+  let frontier = []; // Growing/shrinking frontier isn't optimal
   frontier = pqPush(frontier, start, 1); // Priority of 1
 
-  const cameFrom: any[] = []; // Keep a map of where we came from
-  const startKey: any = JSON.stringify(start);
+  const cameFrom = []; // Keep a map of where we came from
+  const startKey = JSON.stringify(start);
   cameFrom[startKey] = start; // Start didn't come from anywhere
 
-  const costSoFar: number[] = []; // Read to handle varying costs of travel
+  const costSoFar = []; // Read to handle varying costs of travel
   costSoFar[startKey] = 0;
 
-  let current: { x: number; y: number };
+  let current;
   while (frontier.length > 0) {
     [frontier, current] = pqPop(frontier); // Get starting node from the beginning of it
-    const currentKey: any = JSON.stringify(current);
+    const currentKey = JSON.stringify(current);
 
     // We can't directly compare objects, so compare their properties
     if (current.x === goal.x && current.y === goal.y) {
@@ -25,23 +25,23 @@ export const findPath = (level: any, start: any, goal: any) => {
       const path = [];
 
       // We've found our path
-      let p: any = current;
+      let p = current;
       while (p.x !== start.x || p.y !== start.y) {
         path.push(p);
-        const pKey: any = JSON.stringify(p);
+        const pKey = JSON.stringify(p);
         p = cameFrom[pKey];
       }
       path.push(p);
 
       // Reverse array
       for (let i = 0, j = path.length - 1; i < j; i++, j--) {
-        const tmp: any = path[i];
+        const tmp = path[i];
         path[i] = path[j];
         path[j] = tmp;
       }
 
       console.log(
-        `Found path: ${path.map((pos) => `${pos.x},${pos.y}`).join(' → ')}`
+        `Found path: ${path.map((pos) => `${pos.x},${pos.y}`).join(" → ")}`
       );
 
       return path;
@@ -49,8 +49,8 @@ export const findPath = (level: any, start: any, goal: any) => {
 
     const neighbors = getNeighbors(level, current);
 
-    neighbors.forEach((next: any) => {
-      const nextKey: any = JSON.stringify(next);
+    neighbors.forEach((next) => {
+      const nextKey = JSON.stringify(next);
 
       const newCost = costSoFar[currentKey] + 1; // Always 1 for now
       const exists = costSoFar[nextKey] !== undefined;
@@ -71,8 +71,8 @@ export const findPath = (level: any, start: any, goal: any) => {
 };
 
 // Return array of positions that are adjacent
-const getNeighbors = (level: any, pos: any) => {
-  const neighbors: any = [];
+const getNeighbors = (level, pos) => {
+  const neighbors = [];
   const dirs = [
     { x: pos.x - 1, y: pos.y },
     { x: pos.x + 1, y: pos.y },
@@ -89,7 +89,7 @@ const getNeighbors = (level: any, pos: any) => {
   return neighbors;
 };
 
-const canWalk = (level: any, pos: any) => {
+const canWalk = (level, pos) => {
   if (!inBounds(level, pos)) {
     return false;
   }
@@ -106,7 +106,7 @@ const canWalk = (level: any, pos: any) => {
 };
 
 // Check if x,y is inbounds
-const inBounds = (level: any, pos: any) => {
+const inBounds = (level, pos) => {
   return (
     pos.x < level[0].length && pos.y < level.length && pos.x >= 0 && pos.y >= 0
   );

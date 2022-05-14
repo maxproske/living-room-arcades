@@ -1,16 +1,14 @@
-import { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { Pos } from '~/types';
+import styled from 'styled-components'
 
 const StyledEntity = styled.div`
   width: 100%;
   height: 100%;
 
   position: absolute;
-`;
+`
 
 // TODO: Share styled component with Tile
-const StyledEntityTexture = styled.div<{ tileset: any; texturePos: any }>`
+const StyledEntityTexture = styled.div`
   width: 100%;
   height: 100%;
 
@@ -28,14 +26,9 @@ const StyledEntityTexture = styled.div<{ tileset: any; texturePos: any }>`
   left: -32px;
 
   transform: rotateZ(-45deg) rotateY(-60deg) scale(2.9);
-`;
+`
 
-interface EntityProps {
-  tileset: any;
-  texturePos: any;
-}
-
-export const Entity: React.FC<EntityProps> = ({ tileset, texturePos }) => {
+export const Entity = ({ tileset, texturePos }) => {
   // Get background position for texture
   // useEffect(() => {
   //   if (mapTextureIndex[symbol]) {
@@ -53,11 +46,5 @@ export const Entity: React.FC<EntityProps> = ({ tileset, texturePos }) => {
   //   }
   // }, [mapTextureIndex, symbol]);
 
-  return (
-    <StyledEntity>
-      {texturePos && (
-        <StyledEntityTexture tileset={tileset} texturePos={texturePos} />
-      )}
-    </StyledEntity>
-  );
-};
+  return <StyledEntity>{texturePos && <StyledEntityTexture tileset={tileset} texturePos={texturePos} />}</StyledEntity>
+}

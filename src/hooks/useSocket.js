@@ -13,6 +13,20 @@ export const useSocket = () => {
       const socket = io()
       socketRef.current = socket
 
+      // socket.on('connect', () => {
+      //   socket.emit('specialConnect', { socketId: socket.id })
+      // })
+
+      // socket.on('specialConnect', ({ socketId }) => {
+      //   const time = new Intl.DateTimeFormat('en-US', { timeStyle: 'medium' }).format(new Date())
+      //   const newMessage = {
+      //     socketId,
+      //     message: `${time}: A user has specially connected.`,
+      //   }
+
+      //   setMessages((prev) => [...prev, newMessage])
+      // })
+
       socket.on('userConnected', ({ socketId }) => {
         const time = new Intl.DateTimeFormat('en-US', { timeStyle: 'medium' }).format(new Date())
         const newMessage = {

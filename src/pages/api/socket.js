@@ -7,15 +7,20 @@ const ioHandler = (req, res) => {
 
     const io = new Server(res.socket.server)
 
-    const users = []
-
     io.on('connection', (socket) => {
       const socketId = socket.id
-      users.push(socketId)
 
-      // socket.broadcast.emit sends to all connected clients except the sender
+      // I don't know why both of these are required
+      // Keep specialConnect in case this black magic stops working at some point
       // socket.emit sends to all connected clients
+      // socket.broadcast.emit sends to all connected clients except the sender
+      socket.emit('userConnected', { socketId })
       socket.broadcast.emit('userConnected', { socketId })
+
+      // socket.on('specialConnect', ({ socketId }) => {
+      //   socket.emit('specialConnect', { socketId })
+      //   socket.broadcast.emit('specialConnect', { socketId })
+      // })
 
       socket.on('sendMessage', ({ message }) => {
         console.log('server: sendMessage', { socketId, message })
@@ -28,17 +33,11 @@ const ioHandler = (req, res) => {
         console.log('server: disconnect')
 
         socket.broadcast.emit('userDisconnected', { socketId })
-
-        const userIndex = users.indexOf(socketId)
-        users.splice(userIndex, 1)
       })
     })
 
     res.socket.server.io = io
-  } else {
-    console.log('socket.io already running')
   }
-
   res.end()
 }
 

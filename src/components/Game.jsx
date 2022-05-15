@@ -4,6 +4,7 @@ import styled from 'styled-components'
 // Components
 import { Map } from './Map'
 import { ContextMenu } from '~/components/ContextMenu'
+import { Chat } from '~/components/Chat'
 
 // Custom hooks
 import { useInterval } from '../hooks/useInterval'
@@ -96,7 +97,8 @@ export const Game = () => {
         playerPathIndex={playerPathIndex}
         playerPath={playerPath}
       />
-      <ContextMenu outerRef={gameRef} />
+      {/* <ContextMenu outerRef={gameRef} /> */}
+      <Chat />
     </StyledGameWrapper>
   )
 }

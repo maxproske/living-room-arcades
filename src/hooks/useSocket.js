@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import io from 'socket.io-client'
 
 export const useSocket = () => {
   const [messages, setMessages] = useState([])
+  const socketRef = useRef(null)
 
   useEffect(() => {
     // https://stackoverflow.com/questions/57512366/how-to-use-socket-io-with-next-js-api-routes/62547135#62547135
@@ -10,27 +11,49 @@ export const useSocket = () => {
     // https://github.com/iamgyz/use-socket.io-client
     fetch('/api/socket').finally(() => {
       const socket = io()
-
-      socket.on('connect', () => {
-        console.log('connect')
-        socket.emit('hello')
-      })
-
-      socket.on('hello', (data) => {
-        console.log('hello', data)
-      })
+      socketRef.current = socket
 
       socket.on('userConnected', ({ socketId }) => {
-        const message = `${socketId} connected`
-        setMessages((prev) => [...prev, message])
+        const time = new Intl.DateTimeFormat('en-US', { timeStyle: 'medium' }).format(new Date())
+        const newMessage = {
+          socketId,
+          message: `${time}: A user has connected.`,
+        }
+
+        setMessages((prev) => [...prev, newMessage])
       })
 
       socket.on('userDisconnected', ({ socketId }) => {
-        const message = `${socketId} disconnected`
-        setMessages((prev) => [...prev, message])
+        const time = new Intl.DateTimeFormat('en-US', { timeStyle: 'medium' }).format(new Date())
+        const newMessage = {
+          socketId,
+          message: `${time}: A user has disconnected.`,
+        }
+
+        setMessages((prev) => [...prev, newMessage])
+      })
+
+      socket.on('messageSent', ({ socketId, message }) => {
+        console.log('client: messageSent', { socketId, message })
+
+        const time = new Intl.DateTimeFormat('en-US', { timeStyle: 'medium' }).format(new Date())
+        const newMessage = {
+          socketId,
+          message: `${time}: ${message}`,
+        }
+
+        setMessages((prev) => [...prev, newMessage])
       })
     })
   }, [])
 
-  return { messages }
+  const sendMessage = ({ message }) => {
+    console.log('client: sendMessage', { message })
+
+    if (socketRef.current) {
+      socketRef.current.emit('sendMessage', { message })
+    }
+  }
+
+  return { messages, sendMessage, socketId: socketRef.current?.id }
 }

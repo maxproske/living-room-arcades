@@ -17,8 +17,16 @@ const ioHandler = (req, res) => {
       // socket.emit sends to all connected clients
       socket.broadcast.emit('userConnected', { socketId })
 
+      socket.on('sendMessage', ({ message }) => {
+        console.log('server: sendMessage', { socketId, message })
+
+        socket.emit('messageSent', { socketId, message })
+        socket.broadcast.emit('messageSent', { socketId, message })
+      })
+
       socket.on('disconnect', () => {
         console.log('server: disconnect')
+
         socket.broadcast.emit('userDisconnected', { socketId })
 
         const userIndex = users.indexOf(socketId)

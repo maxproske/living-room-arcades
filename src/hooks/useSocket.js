@@ -26,30 +26,33 @@ export const useSocket = () => {
       })
 
       socket.on('specialConnect', ({ socketId }) => {
-        const time = new Intl.DateTimeFormat('en-US', { timeStyle: 'medium' }).format(new Date())
+        const time = new Intl.DateTimeFormat('en-CA', { timeStyle: 'medium' }).format(new Date())
         const newMessage = {
           socketId,
-          message: `${time}: A user has connected.`,
+          message: `A user has connected.`,
+          time,
         }
 
         setMessages((prev) => [...prev, newMessage])
       })
 
       socket.on('userConnected', ({ socketId }) => {
-        const time = new Intl.DateTimeFormat('en-US', { timeStyle: 'medium' }).format(new Date())
+        const time = new Intl.DateTimeFormat('en-CA', { timeStyle: 'medium' }).format(new Date())
         const newMessage = {
           socketId,
-          message: `${time}: A user has connected.`,
+          message: `A user has connected.`,
+          time,
         }
 
         setMessages((prev) => [...prev, newMessage])
       })
 
       socket.on('userDisconnected', ({ socketId }) => {
-        const time = new Intl.DateTimeFormat('en-US', { timeStyle: 'medium' }).format(new Date())
+        const time = new Intl.DateTimeFormat('en-CA', { timeStyle: 'medium' }).format(new Date())
         const newMessage = {
           socketId,
-          message: `${time}: A user has disconnected.`,
+          message: `A user has disconnected.`,
+          time,
         }
 
         setMessages((prev) => [...prev, newMessage])
@@ -60,10 +63,11 @@ export const useSocket = () => {
       socket.on('messageSent', ({ socketId, message }) => {
         console.log('client: messageSent', { socketId, message })
 
-        const time = new Intl.DateTimeFormat('en-US', { timeStyle: 'medium' }).format(new Date())
+        const time = new Intl.DateTimeFormat('en-CA', { timeStyle: 'medium' }).format(new Date())
         const newMessage = {
           socketId,
-          message: `${time}: ${message}`,
+          message: message,
+          time,
         }
 
         setMessages((prev) => [...prev, newMessage])

@@ -9,6 +9,7 @@ const StyledMapWrapper = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 1000;
 `
 
 const StyledMap = styled.div`
@@ -39,6 +40,7 @@ export const Map = memo(
     playerTextureIndex,
     playerPathIndex,
     playerPath,
+    socketId,
   }) => {
     // const renderTiles = useCallback(() => {
     //   map.map((row: any[], y: any) =>
@@ -96,6 +98,7 @@ export const Map = memo(
                       handleWalkEnd={handleWalkEnd}
                       playerPathIndex={playerPathIndex}
                       playerPath={playerPath}
+                      socketId={socketId}
                     />
                   )
                 })

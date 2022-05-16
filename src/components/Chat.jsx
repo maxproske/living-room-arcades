@@ -1,9 +1,7 @@
 import { useState } from 'react'
 import styled, { keyframes } from 'styled-components'
-import { useSocket } from '~/hooks/useSocket'
 
-export const Chat = () => {
-  const { socketId, messages, sendMessage } = useSocket()
+export const Chat = ({ emitMessage, messages, socketId }) => {
   const [message, setMessage] = useState('')
 
   const handleMessageChange = (e) => {
@@ -12,12 +10,18 @@ export const Chat = () => {
     setMessage(messageUpdate)
   }
 
-  const handleSendMessage = () => {
+  const handleEmitMessage = () => {
     if (message) {
-      sendMessage({ message })
+      emitMessage({ message })
 
       setMessage('') // Clear message
     }
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    handleEmitMessage()
   }
 
   return (
@@ -27,20 +31,25 @@ export const Chat = () => {
           messages.map((message, i) => {
             return (
               <StyledMessage key={i} isCurrentSocket={socketId === message.socketId}>
-                {message.message}
+                <p>{message.message}</p>
+                <StyledTime>{message.time}</StyledTime>
               </StyledMessage>
             )
           })}
       </StyledMessages>
       <StyledChat>
-        <input type="text" value={message} onChange={handleMessageChange} />
-        <button onClick={() => handleSendMessage()}>Send</button>
+        <form onSubmit={handleSubmit}>
+          <StyledInput type="text" value={message} onChange={handleMessageChange} />
+          <StyledButton type="submit">Send</StyledButton>
+        </form>
       </StyledChat>
     </StyledWrapper>
   )
 }
 
 const StyledWrapper = styled.div`
+  position: absolute;
+  top: 0;
   height: 100%;
   display: flex;
   flex-flow: column;
@@ -50,10 +59,12 @@ const StyledWrapper = styled.div`
 
 const chatAnimation = keyframes`
 0% {
-  opacity:0;
+  opacity: 0;
+  top: 0.5rem;
 }
 100% {
-  opacity:1;
+  opacity: 1;
+  top: 0;
 }
 `
 
@@ -68,8 +79,9 @@ const StyledMessages = styled.div`
   height: 100%;
   max-width: 20rem;
   max-height: 20rem;
-  z-index: 1000;
-  overflow-y: hidden;
+  y-overflow: hidden;
+
+  pointer-events: none;
 `
 
 const StyledMessage = styled.article`
@@ -78,9 +90,38 @@ const StyledMessage = styled.article`
     isCurrentSocket ? 'rgba(125, 211, 244, 0.85)' : 'rgba(244, 125, 211, 0.85)'};
   border: 1px solid black;
   border-radius: 0.35rem;
-  padding: 0.1rem 0.25rem;
+  padding: 0.25rem 0.35rem;
+  min-height: 2.5rem;
 
-  animation: ${chatAnimation} 2s;
+  position: relative;
+  animation: ${chatAnimation} 0.6s;
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
 `
 
-const StyledChat = styled.div``
+const StyledChat = styled.div`
+  display: flex;
+`
+
+const StyledInput = styled.input`
+  height: 2rem;
+  border: 0;
+`
+
+const StyledButton = styled.button`
+  border: 0;
+  background: white;
+  border-left: 1px solid lightgrey;
+
+  height: 2rem;
+`
+
+const StyledTime = styled.span`
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 0.6875rem;
+  float: right;
+`

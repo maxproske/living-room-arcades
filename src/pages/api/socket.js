@@ -1,4 +1,5 @@
 // https://stackoverflow.com/questions/57512366/how-to-use-socket-io-with-next-js-api-routes/62547135#62547135
+// https://github.com/voomp/leader-4/blob/ff992433b97d098be2e01f3c3534c1bdc23c85b9/pages/%5Bplayer%5D.tsx
 import { Server } from 'socket.io'
 
 const ioHandler = (req, res) => {
@@ -7,23 +8,38 @@ const ioHandler = (req, res) => {
 
     const io = new Server(res.socket.server)
 
+    const players = {}
+
     io.on('connection', (socket) => {
       const socketId = socket.id
 
-      // I don't know why both of these are required
+      // Doing this spams the servers
       // Keep specialConnect in case this black magic stops working at some point
       // socket.emit sends to all connected clients
       // socket.broadcast.emit sends to all connected clients except the sender
-      socket.emit('userConnected', { socketId })
-      socket.broadcast.emit('userConnected', { socketId })
+      // socket.emit('userConnected', { socketId })
+      // socket.broadcast.emit('userConnected', { socketId })
 
-      // socket.on('specialConnect', ({ socketId }) => {
-      //   socket.emit('specialConnect', { socketId })
-      //   socket.broadcast.emit('specialConnect', { socketId })
-      // })
+      socket.on('specialConnect', ({ socketId, pos }) => {
+        console.log('server: specialConnect')
 
-      socket.on('sendMessage', ({ message }) => {
-        console.log('server: sendMessage', { socketId, message })
+        // Add player
+        players[socketId] = {
+          pos,
+        }
+        console.log(`${Object.keys(players).length} players online.`)
+
+        socket.emit('specialConnect', { socketId })
+        socket.broadcast.emit('specialConnect', { socketId })
+
+        Object.keys(players).map((playerSockerId) => {
+          socket.emit('playerPosUpdated', { socketId: playerSockerId, pos: players[playerSockerId].pos })
+          socket.broadcast.emit('playerPosUpdated', { socketId: playerSockerId, pos: players[playerSockerId].pos })
+        })
+      })
+
+      socket.on('emitMessage', ({ message }) => {
+        console.log('server: emitMessage', { socketId, message })
 
         socket.emit('messageSent', { socketId, message })
         socket.broadcast.emit('messageSent', { socketId, message })
@@ -32,12 +48,27 @@ const ioHandler = (req, res) => {
       socket.on('disconnect', () => {
         console.log('server: disconnect')
 
+        // Remove player
+        delete players[socketId]
+        console.log(`${Object.keys(players).length} players online.`)
+
         socket.broadcast.emit('userDisconnected', { socketId })
+      })
+
+      socket.on('updatePlayerPos', ({ socketId, pos }) => {
+        console.log('server: updatePlayerPos', { socketId, pos })
+
+        // Update in-memory store
+        players[socketId].pos = pos
+
+        socket.emit('playerPosUpdated', { socketId, pos })
+        socket.broadcast.emit('playerPosUpdated', { socketId, pos })
       })
     })
 
     res.socket.server.io = io
   }
+
   res.end()
 }
 

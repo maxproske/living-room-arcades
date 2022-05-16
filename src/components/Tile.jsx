@@ -4,6 +4,10 @@ import styled, { css } from 'styled-components'
 // Components
 import { Entity } from './Entity'
 import { Player } from './Player'
+import { OtherPlayer } from './OtherPlayer'
+
+// Stores
+import { useMultiplayerStore } from '~/stores/MultiplayerProvider'
 
 const StyledTile = styled.div`
   background-color: rgba(255, 100, 100, 0);
@@ -59,7 +63,10 @@ export const Tile = memo(
     handleWalkEnd,
     playerPathIndex,
     playerPath,
+    socketId,
   }) => {
+    const { allPlayerPos } = useMultiplayerStore()
+
     const handleClick = () => {
       console.log(`clicked ${x}:${y}`)
 
@@ -87,6 +94,18 @@ export const Tile = memo(
               playerPath={playerPath}
             />
           )
+        }
+      })
+    }
+
+    const renderOtherPlayers = () => {
+      return Object.keys(allPlayerPos).map((playerSocketId) => {
+        const { pos } = allPlayerPos[playerSocketId]
+        const { x: playerXPos, y: playerYPos } = pos
+
+        // Don't render self as an other player
+        if (playerSocketId !== socketId && x === playerXPos && y === playerYPos) {
+          return <OtherPlayer key={`[otherPlayer][${x},${y}]`} playerTextureIndex={playerTextureIndex} />
         }
       })
     }
@@ -139,6 +158,7 @@ export const Tile = memo(
         isWalkable={mapTextureIndexes.obstacles === 0}
       >
         {renderPlayers()}
+        {renderOtherPlayers()}
         {renderTiles()}
       </StyledTile>
     )

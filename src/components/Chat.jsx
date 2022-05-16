@@ -1,9 +1,7 @@
 import { useState } from 'react'
 import styled, { keyframes } from 'styled-components'
-import { useSocket } from '~/hooks/useSocket'
 
-export const Chat = () => {
-  const { socketId, messages, sendMessage } = useSocket()
+export const Chat = ({ emitMessage, messages, socketId }) => {
   const [message, setMessage] = useState('')
 
   const handleMessageChange = (e) => {
@@ -12,9 +10,9 @@ export const Chat = () => {
     setMessage(messageUpdate)
   }
 
-  const handleSendMessage = () => {
+  const handleEmitMessage = () => {
     if (message) {
-      sendMessage({ message })
+      emitMessage({ message })
 
       setMessage('') // Clear message
     }
@@ -34,13 +32,15 @@ export const Chat = () => {
       </StyledMessages>
       <StyledChat>
         <input type="text" value={message} onChange={handleMessageChange} />
-        <button onClick={() => handleSendMessage()}>Send</button>
+        <button onClick={() => handleEmitMessage()}>Send</button>
       </StyledChat>
     </StyledWrapper>
   )
 }
 
 const StyledWrapper = styled.div`
+  position: absolute;
+  top: 0;
   height: 100%;
   display: flex;
   flex-flow: column;
@@ -50,10 +50,12 @@ const StyledWrapper = styled.div`
 
 const chatAnimation = keyframes`
 0% {
-  opacity:0;
+  opacity: 0;
+  top: 0.5rem;
 }
 100% {
-  opacity:1;
+  opacity: 1;
+  top: 0;
 }
 `
 
@@ -69,7 +71,6 @@ const StyledMessages = styled.div`
   max-width: 20rem;
   max-height: 20rem;
   z-index: 1000;
-  overflow-y: hidden;
 `
 
 const StyledMessage = styled.article`
@@ -80,7 +81,8 @@ const StyledMessage = styled.article`
   border-radius: 0.35rem;
   padding: 0.1rem 0.25rem;
 
-  animation: ${chatAnimation} 2s;
+  position: relative;
+  animation: ${chatAnimation} 0.6s;
 `
 
 const StyledChat = styled.div``

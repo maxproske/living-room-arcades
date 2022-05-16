@@ -12,6 +12,7 @@ import { useInterval } from '../hooks/useInterval'
 import { useGameStatus } from '../hooks/useGameStatus'
 import { usePlayer } from '../hooks/usePlayer'
 import { useTiledMap } from '~/hooks/useTiledMap'
+import { useSocket } from '~/hooks/useSocket'
 
 const StyledGameWrapper = styled.div`
   width: 100vw;
@@ -22,12 +23,14 @@ const StyledGameWrapper = styled.div`
 export const Game = () => {
   const gameRef = useRef(null)
   const [map, setMap] = useState(null)
+  const { socketId, messages, emitMessage, emitPlayerPos } = useSocket()
 
   const { mapWidth, mapHeight, tileWidth, tileHeight, tilelayers, tilesets, getTilesetIndexAtPos } = useTiledMap()
   const [frames, tick] = useGameStatus()
   const { player, setPlayer, playerTextureIndex, handleTileClick, handleWalkEnd, playerPathIndex, playerPath } =
     usePlayer({
       map,
+      emitPlayerPos,
     })
 
   const handleKeyDown = ({ keyCode }) => {}
@@ -96,9 +99,10 @@ export const Game = () => {
         handleWalkEnd={handleWalkEnd}
         playerPathIndex={playerPathIndex}
         playerPath={playerPath}
+        socketId={socketId}
       />
       {/* <ContextMenu outerRef={gameRef} /> */}
-      <Chat />
+      <Chat socketId={socketId} messages={messages} emitMessage={emitMessage} />
     </StyledGameWrapper>
   )
 }

@@ -39,6 +39,7 @@ export const Map = memo(
     playerTextureIndex,
     playerPathIndex,
     playerPath,
+    socketId,
   }) => {
     // const renderTiles = useCallback(() => {
     //   map.map((row: any[], y: any) =>
@@ -96,6 +97,7 @@ export const Map = memo(
                       handleWalkEnd={handleWalkEnd}
                       playerPathIndex={playerPathIndex}
                       playerPath={playerPath}
+                      socketId={socketId}
                     />
                   )
                 })

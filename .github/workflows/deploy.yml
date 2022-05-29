@@ -19,7 +19,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           host: ${{ secrets.HOST }}
           key: ${{ secrets.KEY }}
-          script: cd living-room-arcades && git fetch && git checkout ${{ github.ref_name }} && git pull && ./deploy.sh
+          script: cd living-room-arcades && git fetch && git checkout ${{ github.ref_name }} && git pull && ./prod.sh
 
       # Debug ${{ github }} object
       # - name: Dump GitHub context

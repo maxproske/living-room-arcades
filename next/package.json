@@ -1,0 +1,31 @@
+{
+  "name": "living-room-arcades",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "export": "next export -o build/"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": "eslint --fix --cache"
+  },
+  "dependencies": {
+    "bresenham": "^0.0.4",
+    "next": "^12.1.6",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "socket.io": "^4.5.0",
+    "socket.io-client": "^4.5.0",
+    "styled-components": "^5.3.3",
+    "styled-normalize": "^8.0.7"
+  },
+  "devDependencies": {
+    "eslint": "^8.13.0",
+    "eslint-config-next": "^12.1.5",
+    "eslint-config-prettier": "^8.5.0",
+    "lint-staged": "^12.3.3",
+    "prettier": "^2.6.2"
+  }
+}

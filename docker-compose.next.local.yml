@@ -1,0 +1,16 @@
+# Extends `docker-compose.next.yml`
+version: "3"
+
+services:
+  next:
+    container_name: next
+    build:
+      context: ./next
+      dockerfile: debug.Dockerfile
+    # Sync local changes with container
+    # Note: Don't sync the `.next` directory, or strange bugs will appear when switching branches
+    volumes:
+      - ./next/public:/app/public
+      - ./next/src:/app/src
+    environment:
+      IS_QA: ${IS_QA}

@@ -1,0 +1,7 @@
+# Base configuration
+version: "3"
+
+# Network allows containers to talk to each other by name instead of private IP address
+networks:
+  living-room-arcades:
+    external: true

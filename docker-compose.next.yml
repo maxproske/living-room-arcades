@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  next:
+    container_name: next
+    build:
+      context: ./next
+      dockerfile: release.Dockerfile
+      # Environment variables must be present as arguments at build time
+      # https://github.com/vercel/next.js/discussions/14030
+      args:
+        IS_QA: ${IS_QA}
+    restart: always
+    networks:
+      - living-room-arcades
+      

@@ -13,4 +13,13 @@ module.exports = {
     // Allow project to build even if project has ESLint errors
     ignoreDuringBuilds: true,
   },
+  webpack: (config) => {
+    // Fix Hot Reloading on Windows
+    config.watchOptions = {
+      poll: 500,
+      aggregateTimeout: 300,
+      ignored: /node_modules/,
+    }
+    return config
+  },
 }

@@ -38,11 +38,16 @@ const StyledPlayerTexture = styled.div`
   transform: rotateZ(-45deg) rotateY(-60deg) scale(2.9);
 `
 
-export const OtherPlayer = () => {
+export const OtherPlayer = ({ playerTextureIndex, dir }) => {
+  const getTexturePos = () => {
+    if (!playerTextureIndex || !dir) return { xPos: 0, yPos: 0 }
+    return playerTextureIndex[dir][0]
+  }
+
   return (
     <PlayerWC>
       <StyledPlayer>
-        <StyledPlayerTexture texturePos={{}} />
+        <StyledPlayerTexture texturePos={getTexturePos()} />
       </StyledPlayer>
     </PlayerWC>
   )

@@ -20,12 +20,13 @@ const ioHandler = (req, res) => {
       // socket.emit('userConnected', { socketId })
       // socket.broadcast.emit('userConnected', { socketId })
 
-      socket.on('specialConnect', ({ socketId, pos }) => {
+      socket.on('specialConnect', ({ socketId, pos, dir }) => {
         console.log('server: specialConnect')
 
         // Add player
         players[socketId] = {
           pos,
+          dir,
         }
         console.log(`${Object.keys(players).length} players online.`)
 
@@ -33,8 +34,16 @@ const ioHandler = (req, res) => {
         socket.broadcast.emit('specialConnect', { socketId })
 
         Object.keys(players).map((playerSockerId) => {
-          socket.emit('playerPosUpdated', { socketId: playerSockerId, pos: players[playerSockerId].pos })
-          socket.broadcast.emit('playerPosUpdated', { socketId: playerSockerId, pos: players[playerSockerId].pos })
+          socket.emit('playerPosUpdated', { 
+            socketId: playerSockerId, 
+            pos: players[playerSockerId].pos,
+            dir: players[playerSockerId].dir 
+          })
+          socket.broadcast.emit('playerPosUpdated', { 
+            socketId: playerSockerId, 
+            pos: players[playerSockerId].pos,
+            dir: players[playerSockerId].dir 
+          })
         })
       })
 
@@ -55,14 +64,15 @@ const ioHandler = (req, res) => {
         socket.broadcast.emit('userDisconnected', { socketId })
       })
 
-      socket.on('updatePlayerPos', ({ socketId, pos }) => {
-        console.log('server: updatePlayerPos', { socketId, pos })
+      socket.on('updatePlayerPos', ({ socketId, pos, dir }) => {
+        console.log('server: updatePlayerPos', { socketId, pos, dir })
 
         // Update in-memory store
         players[socketId].pos = pos
+        players[socketId].dir = dir
 
-        socket.emit('playerPosUpdated', { socketId, pos })
-        socket.broadcast.emit('playerPosUpdated', { socketId, pos })
+        socket.emit('playerPosUpdated', { socketId, pos, dir })
+        socket.broadcast.emit('playerPosUpdated', { socketId, pos, dir })
       })
     })
 

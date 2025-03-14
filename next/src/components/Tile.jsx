@@ -100,12 +100,12 @@ export const Tile = memo(
 
     const renderOtherPlayers = () => {
       return Object.keys(allPlayerPos).map((playerSocketId) => {
-        const { pos } = allPlayerPos[playerSocketId]
+        const { pos, dir } = allPlayerPos[playerSocketId]
         const { x: playerXPos, y: playerYPos } = pos
 
         // Don't render self as an other player
         if (playerSocketId !== socketId && x === playerXPos && y === playerYPos) {
-          return <OtherPlayer key={`[otherPlayer][${x},${y}]`} playerTextureIndex={playerTextureIndex} />
+          return <OtherPlayer key={`[otherPlayer][${x},${y}]`} playerTextureIndex={playerTextureIndex} dir={dir} />
         }
       })
     }

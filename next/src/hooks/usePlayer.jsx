@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { findPath } from '~/utils/pathing'
+import { useUser } from '../stores/UserProvider'
 
 export const usePlayer = ({ map, emitPlayerPos }) => {
   const [player, setPlayer] = useState(null)
@@ -7,6 +8,7 @@ export const usePlayer = ({ map, emitPlayerPos }) => {
   const [playerPath, setPlayerPath] = useState(null)
   const [isWalking, setIsWalking] = useState(false)
   const [playerPathIndex, setPlayerPathIndex] = useState(null)
+  const { state } = useUser()
 
   useEffect(() => {
     const fetchPlayer = async () => {
@@ -47,10 +49,10 @@ export const usePlayer = ({ map, emitPlayerPos }) => {
   }, [])
 
   useEffect(() => {
-    if (player) {
-      emitPlayerPos({ pos: player.pos })
+    if (player && state.dir) {
+      emitPlayerPos({ pos: player.pos, dir: state.dir })
     }
-  }, [player])
+  }, [player, state.dir, emitPlayerPos])
 
   const handleTileClick = useCallback(
     (tile) => {

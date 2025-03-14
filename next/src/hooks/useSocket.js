@@ -22,10 +22,10 @@ export const useSocket = () => {
       updateSocketRef(socket)
 
       socket.on('connect', () => {
-        socket.emit('specialConnect', { socketId: socket.id, pos: { x: 8, y: 8 } })
+        socket.emit('specialConnect', { socketId: socket.id, pos: { x: 8, y: 8 }, dir: 'SE' })
       })
 
-      socket.on('specialConnect', ({ socketId }) => {
+      socket.on('specialConnect', ({ socketId, dir }) => {
         const time = new Intl.DateTimeFormat('en-CA', { timeStyle: 'medium' }).format(new Date())
         const newMessage = {
           socketId,
@@ -73,10 +73,10 @@ export const useSocket = () => {
         setMessages((prev) => [...prev, newMessage])
       })
 
-      socket.on('playerPosUpdated', ({ socketId, pos }) => {
-        console.log('client: playerPosUpdated', { socketId, pos })
+      socket.on('playerPosUpdated', ({ socketId, pos, dir }) => {
+        console.log('client: playerPosUpdated', { socketId, pos, dir })
 
-        updateAllPlayerPos({ socketId, pos })
+        updateAllPlayerPos({ socketId, pos, dir })
       })
     })
 
@@ -105,15 +105,15 @@ export const useSocket = () => {
   )
 
   const emitPlayerPos = useCallback(
-    ({ pos }) => {
+    ({ pos, dir }) => {
       if (!socketRef) {
         console.error(`Couldn't get socket ref`)
         return
       }
 
-      console.log('client: updatePlayerPos', { socketId: socketRef.id, pos })
+      console.log('client: updatePlayerPos', { socketId: socketRef.id, pos, dir })
 
-      socketRef.emit('updatePlayerPos', { socketId: socketRef.id, pos })
+      socketRef.emit('updatePlayerPos', { socketId: socketRef.id, pos, dir })
     },
     [socketRef]
   )

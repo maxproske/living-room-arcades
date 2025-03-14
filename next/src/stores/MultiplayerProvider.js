@@ -17,6 +17,7 @@ function reducer(state, action) {
           ...state.allPlayerPos,
           [action.socketId]: {
             pos: action.pos,
+            dir: action.dir
           },
         },
       }
@@ -36,7 +37,7 @@ function reducer(state, action) {
 export const MultiplayerProvider = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const updateAllPlayerPos = ({ socketId, pos }) => dispatch({ type: 'UPDATE_ALL_PLAYER_POS', socketId, pos })
+  const updateAllPlayerPos = ({ socketId, pos, dir }) => dispatch({ type: 'UPDATE_ALL_PLAYER_POS', socketId, pos, dir })
   const removePlayerPos = ({ socketId }) => dispatch({ type: 'REMOVE_PLAYER_POS', socketId })
 
   const value = useMemo(

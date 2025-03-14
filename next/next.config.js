@@ -1,5 +1,5 @@
-module.exports = {
-  swcMinify: true,
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   compiler: {
     // Ensure backwards compatibility for SSR styled-components
     // ssr and displayName are configured by default
@@ -13,13 +13,7 @@ module.exports = {
     // Allow project to build even if project has ESLint errors
     ignoreDuringBuilds: true,
   },
-  webpack: (config) => {
-    // Fix Hot Reloading on Windows
-    config.watchOptions = {
-      poll: 500,
-      aggregateTimeout: 300,
-      ignored: /node_modules/,
-    }
-    return config
-  },
+  poweredByHeader: false,
 }
+
+export default nextConfig

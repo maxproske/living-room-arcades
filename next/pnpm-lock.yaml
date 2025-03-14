@@ -1,7 +1,6 @@
 lockfileVersion: 5.4
 
 specifiers:
-  bresenham: ^0.0.4
   eslint: ^9.22.0
   eslint-config-next: ^15.2.2
   eslint-config-prettier: ^10.1.1
@@ -16,7 +15,6 @@ specifiers:
   styled-normalize: ^8.1.1
 
 dependencies:
-  bresenham: 0.0.4
   next: 15.2.2_upmzqgzhjrquwzo2dphtigtdgi
   react: 19.0.0
   react-dom: 19.0.0_react@19.0.0
@@ -812,10 +810,6 @@ packages:
     dependencies:
       fill-range: 7.1.1
     dev: true
-
-  /bresenham/0.0.4:
-    resolution: {integrity: sha512-uMODedbWbeU1Hx+oLMKkmgfhpdcoN/xyMoPMUEEd7OK6IuU0EzWsAlHW6XdTVPj6MvSRJiXjwHvZ4cyRvCkCIw==}
-    dev: false
 
   /busboy/1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}

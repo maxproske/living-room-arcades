@@ -1,5 +1,5 @@
 const Player = ({ children }) => {
-  return <player>{children}</player>
+  return <game-player>{children}</game-player>
 }
 
 export default Player

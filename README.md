@@ -13,16 +13,21 @@ I'm making a game in React without `<canvas>` as a constraint, to improve my kno
 - [X] Pathfinding with obstacles
 - [X] TypeScript
 - [X] Remove Typescript
+- [X] Use web components
 - [X] Chat using WebSockets
 - [X] Multiplayer with real-time player positions and directions
 - [X] Dockerize app
+- [ ] Optimize [CSS background images](https://nextjs.org/docs/app/api-reference/components/image#background-css) for avif/webp
+- [ ] Add TypeScript back
+- [ ] Migrate from pages to app router
+- [ ] [Use a separate websocket server (Go?)](https://codingtricks.co/posts/how-to-use-websocket-in-nextjs-app-router-with-socketio)
 - [ ] Center camera around player
 - [ ] Animate other players
 - [ ] Deploy to Digital Ocean with CI/CD
 - [ ] Monster with fighting minigame
 - [ ] Harvestable node with harvesting minigame
 - [ ] Fighting and harvesting XP
-- [ ] Postgres
+- [ ] Postgres for persistence
 ## Getting Started
 
 ```

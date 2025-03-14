@@ -7,6 +7,7 @@ import { useMultiplayerStore } from '~/stores/MultiplayerProvider'
 export const useSocket = () => {
   const [messages, setMessages] = useState([])
   const [socketRef, updateSocketRef] = useState(null)
+  const [isReady, setIsReady] = useState(false)
   const { allPlayerPos, updateAllPlayerPos, removePlayerPos } = useMultiplayerStore()
 
   useEffect(() => {
@@ -14,14 +15,15 @@ export const useSocket = () => {
       return
     }
 
-    // https://stackoverflow.com/questions/57512366/how-to-use-socket-io-with-next-js-api-routes/62547135#62547135
-    // has less re-renders than
-    // https://github.com/iamgyz/use-socket.io-client
-    fetch('/api/socket').finally(() => {
+    const initSocket = async () => {
+      // Wait for the socket server to be initialized
+      await fetch('/api/socket')
+
       const socket = io()
       updateSocketRef(socket)
 
       socket.on('connect', () => {
+        setIsReady(true)
         socket.emit('specialConnect', { socketId: socket.id, pos: { x: 8, y: 8 }, dir: 'SE' })
       })
 
@@ -56,7 +58,6 @@ export const useSocket = () => {
         }
 
         setMessages((prev) => [...prev, newMessage])
-
         removePlayerPos({ socketId })
       })
 
@@ -78,11 +79,20 @@ export const useSocket = () => {
 
         updateAllPlayerPos({ socketId, pos, dir })
       })
-    })
+
+      socket.on('connect_error', (error) => {
+        console.error('Socket connection error:', error)
+      })
+    }
+
+    initSocket().catch(console.error)
 
     // Cleanup
     return () => {
-      socketRef && socketRef.disconnect()
+      if (socketRef) {
+        setIsReady(false)
+        socketRef.disconnect()
+      }
     }
   }, [])
 
@@ -94,20 +104,20 @@ export const useSocket = () => {
     ({ message }) => {
       console.log('client: emitMessage', { message })
 
-      if (!socketRef) {
-        console.error(`Couldn't get socket ref`)
+      if (!socketRef || !isReady) {
+        console.error(`Socket not ready`)
         return
       }
 
       socketRef.emit('emitMessage', { message })
     },
-    [socketRef]
+    [socketRef, isReady]
   )
 
   const emitPlayerPos = useCallback(
     ({ pos, dir }) => {
-      if (!socketRef) {
-        console.error(`Couldn't get socket ref`)
+      if (!socketRef || !isReady) {
+        console.error(`Socket not ready`)
         return
       }
 
@@ -115,8 +125,8 @@ export const useSocket = () => {
 
       socketRef.emit('updatePlayerPos', { socketId: socketRef.id, pos, dir })
     },
-    [socketRef]
+    [socketRef, isReady]
   )
 
-  return { socket: socketRef, messages, emitMessage, socketId: socketRef?.id, emitPlayerPos }
+  return { socket: socketRef, messages, emitMessage, socketId: socketRef?.id, emitPlayerPos, isReady }
 }

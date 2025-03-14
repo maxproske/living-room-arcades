@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
@@ -26,14 +28,14 @@ const StyledGameWrapper = styled.div`
 export const Game = () => {
   const gameRef = useRef(null)
   const [map, setMap] = useState(null)
-  const { socketId, messages, emitMessage, emitPlayerPos } = useSocket()
-
+  const { socketId, messages, emitMessage, emitPlayerPos, isReady } = useSocket()
   const { mapWidth, mapHeight, tileWidth, tileHeight, tilelayers, tilesets, getTilesetIndexAtPos } = useTiledMap()
+
   const [frames, tick] = useGameStatus()
   const { player, setPlayer, playerTextureIndex, handleTileClick, handleWalkEnd, playerPathIndex, playerPath } =
     usePlayer({
       map,
-      emitPlayerPos,
+      emitPlayerPos: isReady ? emitPlayerPos : null,
     })
 
   const cameraPosition = useCamera(player?.pos)

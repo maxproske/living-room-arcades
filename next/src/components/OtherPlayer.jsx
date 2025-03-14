@@ -27,7 +27,7 @@ const StyledPlayerTexture = styled.div`
   pointer-events: none; /* Hover grid entities, not 96x96 child */
 
   background: url('/assets/player.png');
-  background-position: -${({ texturePos }) => texturePos.xPos}px ${({ texturePos }) => texturePos.yPos}px;
+  background-position: -${({ $texturePos }) => $texturePos.xPos}px ${({ $texturePos }) => $texturePos.yPos}px;
   background-repeat: no-repeat;
   image-rendering: pixelated;
   position: relative;
@@ -47,7 +47,7 @@ export const OtherPlayer = ({ playerTextureIndex, dir }) => {
   return (
     <PlayerWC>
       <StyledPlayer>
-        <StyledPlayerTexture texturePos={getTexturePos()} />
+        <StyledPlayerTexture $texturePos={getTexturePos()} />
       </StyledPlayer>
     </PlayerWC>
   )

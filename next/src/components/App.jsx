@@ -1,5 +1,6 @@
-import { ThemeProvider } from 'styled-components'
+'use client'
 
+import { ThemeProvider } from 'styled-components'
 import { Game } from './Game'
 
 const theme = {

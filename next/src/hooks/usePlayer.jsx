@@ -49,13 +49,15 @@ export const usePlayer = ({ map, emitPlayerPos }) => {
   }, [])
 
   useEffect(() => {
-    if (player && state.dir) {
+    if (player?.pos && state.dir && emitPlayerPos) {
       emitPlayerPos({ pos: player.pos, dir: state.dir })
     }
-  }, [player, state.dir, emitPlayerPos])
+  }, [player?.pos, state.dir, emitPlayerPos])
 
   const handleTileClick = useCallback(
     (tile) => {
+      if (!player) return
+
       const startPos = {
         x: player.pos.x,
         y: player.pos.y,
@@ -73,7 +75,7 @@ export const usePlayer = ({ map, emitPlayerPos }) => {
   )
 
   const handleWalkEnd = useCallback(() => {
-    if (playerPathIndex < playerPath.length) {      
+    if (playerPathIndex < playerPath.length) {
       const playerPathIndexUpdate = playerPathIndex + 1
       const nextPos = playerPath[playerPathIndexUpdate]
 

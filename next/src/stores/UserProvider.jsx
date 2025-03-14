@@ -1,3 +1,5 @@
+'use client'
+
 // https://blog.harveydelaney.com/creating-your-own-mini-redux-in-react
 import { useReducer, createContext, useContext } from 'react'
 import { userReducer, initialUserState } from '~/stores/userReducer'

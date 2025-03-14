@@ -1,3 +1,5 @@
+'use client'
+
 /* eslint-disable react/display-name */
 import { memo } from 'react'
 import styled from 'styled-components'
@@ -13,7 +15,7 @@ const StyledMapWrapper = styled.div`
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(calc(-50% + ${({ cameraX }) => cameraX}px), calc(-50% + ${({ cameraY }) => cameraY}px));
+  transform: translate(calc(-50% + ${({ $cameraX }) => $cameraX}px), calc(-50% + ${({ $cameraY }) => $cameraY}px));
   transform-origin: center center;
   z-index: 1000;
   /* OSRS-style camera following with subtle lag using cubic-bezier */
@@ -52,7 +54,7 @@ export const Map = memo(
     return (
       tilelayers &&
       tilesets && (
-        <StyledMapWrapper cameraX={cameraPosition?.x || 0} cameraY={cameraPosition?.y || 0}>
+        <StyledMapWrapper $cameraX={cameraPosition?.x || 0} $cameraY={cameraPosition?.y || 0}>
           <StyledMap rows={mapWidth} cols={mapHeight}>
             {map &&
               map.map((row, y) =>

@@ -1,3 +1,5 @@
+'use client'
+
 import { memo } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -15,8 +17,8 @@ const StyledTile = styled.div`
   transition: 0.15s;
   position: relative; /* Allow entities and textures to stack */
 
-  ${({ isWalkable }) =>
-    isWalkable &&
+  ${({ $isWalkable }) =>
+    $isWalkable &&
     css`
       &:hover {
         filter: brightness(1.2);
@@ -32,8 +34,8 @@ const StyledTileTexture = styled.div`
 
   pointer-events: none; /* Hover grid entities, not 96x96 child */
 
-  background: url(${({ tileset }) => tileset});
-  background-position: -${({ texturePos }) => texturePos.x}px ${({ texturePos }) => texturePos.y}px;
+  background: url(${({ $tileset }) => $tileset});
+  background-position: -${({ $texturePos }) => $texturePos.x}px ${({ $texturePos }) => $texturePos.y}px;
   background-repeat: no-repeat;
   image-rendering: pixelated;
   position: relative;
@@ -42,7 +44,7 @@ const StyledTileTexture = styled.div`
 
   transform: rotateZ(-45deg) rotateY(-60deg) scale(2.9);
 
-  ${({ isInPlayerPath }) => isInPlayerPath && `filter: brightness(0.5);`}
+  ${({ $isInPlayerPath }) => $isInPlayerPath && `filter: brightness(0.5);`}
 `
 
 /* eslint-disable react/display-name */
@@ -105,7 +107,7 @@ export const Tile = memo(
 
         // Don't render self as an other player
         if (playerSocketId !== socketId && x === playerXPos && y === playerYPos) {
-          return <OtherPlayer key={`[otherPlayer][${x},${y}]`} playerTextureIndex={playerTextureIndex} dir={dir} />
+          return <OtherPlayer key={`[otherPlayer][${playerSocketId}][${x},${y}]`} playerTextureIndex={playerTextureIndex} dir={dir} />
         }
       })
     }
@@ -138,9 +140,9 @@ export const Tile = memo(
         tiles.push(
           <StyledTileTexture
             key={`[walkable][${x},${y}]`}
-            isInPlayerPath={false}
-            tileset={tileset}
-            texturePos={texturePos}
+            $isInPlayerPath={false}
+            $tileset={tileset}
+            $texturePos={texturePos}
           />
         )
       }
@@ -155,7 +157,7 @@ export const Tile = memo(
         key={`[tile][${x},${y}]`}
         depth={x + y + 1}
         onClick={handleClick}
-        isWalkable={mapTextureIndexes.obstacles === 0}
+        $isWalkable={mapTextureIndexes.obstacles === 0}
       >
         {renderPlayers()}
         {renderOtherPlayers()}

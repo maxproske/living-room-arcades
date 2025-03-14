@@ -1,61 +1,7 @@
+'use client'
+
 import { useState } from 'react'
 import styled, { keyframes, css } from 'styled-components'
-
-export const Chat = ({ emitMessage, messages, socketId }) => {
-  const [message, setMessage] = useState('')
-
-  const handleMessageChange = (e) => {
-    const messageUpdate = e.target.value
-
-    setMessage(messageUpdate)
-  }
-
-  const handleEmitMessage = () => {
-    if (message) {
-      emitMessage({ message })
-
-      setMessage('') // Clear message
-    }
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
-    handleEmitMessage()
-  }
-
-  return (
-    <StyledWrapper>
-      <StyledMessages>
-        {messages &&
-          messages.map((message, i) => {
-            return (
-              <StyledMessage key={i} isCurrentSocket={socketId === message.socketId}>
-                <p>{message.message}</p>
-                <StyledTime>{message.time}</StyledTime>
-              </StyledMessage>
-            )
-          })}
-      </StyledMessages>
-      <StyledChat>
-        <form onSubmit={handleSubmit}>
-          <StyledInput type="text" value={message} onChange={handleMessageChange} />
-          <StyledButton type="submit">Send</StyledButton>
-        </form>
-      </StyledChat>
-    </StyledWrapper>
-  )
-}
-
-const StyledWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  height: 100%;
-  display: flex;
-  flex-flow: column;
-  justify-content: flex-end;
-  padding: 1rem;
-`
 
 const chatAnimation = keyframes`
   0% {
@@ -66,6 +12,16 @@ const chatAnimation = keyframes`
     opacity: 1;
     top: 0;
   }
+`
+
+const StyledWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-end;
+  padding: 1rem;
 `
 
 const StyledMessages = styled.div`
@@ -86,15 +42,17 @@ const StyledMessages = styled.div`
 
 const StyledMessage = styled.article`
   color: black;
-  background-color: ${({ isCurrentSocket }) =>
-    isCurrentSocket ? 'rgba(125, 211, 244, 0.85)' : 'rgba(244, 125, 211, 0.85)'};
+  background-color: ${({ $isCurrentSocket }) =>
+    $isCurrentSocket ? 'rgba(125, 211, 244, 0.85)' : 'rgba(244, 125, 211, 0.85)'};
   border: 1px solid black;
   border-radius: 0.35rem;
   padding: 0.25rem 0.35rem;
   min-height: 2.5rem;
 
   position: relative;
-  animation: ${css`${chatAnimation} 0.6s`};
+  animation: ${css`
+    ${chatAnimation} 0.6s
+  `};
 
   p {
     margin: 0;
@@ -125,3 +83,49 @@ const StyledTime = styled.span`
   font-size: 0.6875rem;
   float: right;
 `
+
+export const Chat = ({ emitMessage, messages, socketId }) => {
+  const [message, setMessage] = useState('')
+
+  const handleMessageChange = (e) => {
+    const messageUpdate = e.target.value
+
+    setMessage(messageUpdate)
+  }
+
+  const handleEmitMessage = () => {
+    if (message) {
+      emitMessage({ message })
+
+      setMessage('') // Clear message
+    }
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    handleEmitMessage()
+  }
+
+  return (
+    <StyledWrapper>
+      <StyledMessages>
+        {messages &&
+          messages.map((message, i) => {
+            return (
+              <StyledMessage key={i} $isCurrentSocket={socketId === message.socketId}>
+                <p>{message.message}</p>
+                <StyledTime>{message.time}</StyledTime>
+              </StyledMessage>
+            )
+          })}
+      </StyledMessages>
+      <StyledChat>
+        <form onSubmit={handleSubmit}>
+          <StyledInput type="text" value={message} onChange={handleMessageChange} />
+          <StyledButton type="submit">Send</StyledButton>
+        </form>
+      </StyledChat>
+    </StyledWrapper>
+  )
+}

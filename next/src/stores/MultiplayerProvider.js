@@ -1,3 +1,5 @@
+'use client'
+
 import { createContext, useReducer, useContext, useMemo } from 'react'
 
 const initialState = {
@@ -17,7 +19,7 @@ function reducer(state, action) {
           ...state.allPlayerPos,
           [action.socketId]: {
             pos: action.pos,
-            dir: action.dir
+            dir: action.dir,
           },
         },
       }
@@ -35,6 +37,7 @@ function reducer(state, action) {
 }
 
 export const MultiplayerProvider = (props) => {
+  'use client'
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const updateAllPlayerPos = ({ socketId, pos, dir }) => dispatch({ type: 'UPDATE_ALL_PLAYER_POS', socketId, pos, dir })

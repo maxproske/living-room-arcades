@@ -1,3 +1,5 @@
+'use client'
+
 import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
@@ -16,29 +18,47 @@ const StyledPlayer = styled.div`
   position: absolute;
 
   @keyframes walkSE {
-    0% { left: 0%; }
-    100% { left: 100%; }
+    0% {
+      left: 0%;
+    }
+    100% {
+      left: 100%;
+    }
   }
 
   @keyframes walkNE {
-    0% { bottom: 0%; }
-    100% { bottom: 100%; }
+    0% {
+      bottom: 0%;
+    }
+    100% {
+      bottom: 100%;
+    }
   }
 
   @keyframes walkSW {
-    0% { bottom: 0%; }
-    100% { bottom: -100%; }
+    0% {
+      bottom: 0%;
+    }
+    100% {
+      bottom: -100%;
+    }
   }
 
   @keyframes walkNW {
-    0% { left: 0%; }
-    100% { left: -100%; }
+    0% {
+      left: 0%;
+    }
+    100% {
+      left: -100%;
+    }
   }
 
-  ${({ isWalking, direction }) => isWalking && css`
-    animation: walk${direction} 0.45s steps(3);
-    animation-fill-mode: forwards;
-  `}
+  ${({ $isWalking, $direction }) =>
+    $isWalking &&
+    css`
+      animation: walk${$direction} 0.45s steps(3);
+      animation-fill-mode: forwards;
+    `}
 `
 
 // TODO: Share styled component with Tile
@@ -54,7 +74,7 @@ const StyledPlayerTexture = styled.div`
   pointer-events: none; /* Hover grid entities, not 96x96 child */
 
   background: url('/assets/player.png');
-  background-position: -${({ texturePos }) => texturePos.xPos}px ${({ texturePos }) => texturePos.yPos}px;
+  background-position: -${({ $texturePos }) => $texturePos.xPos}px ${({ $texturePos }) => $texturePos.yPos}px;
   background-repeat: no-repeat;
   image-rendering: pixelated;
   position: relative;
@@ -100,11 +120,11 @@ export const Player = ({ pos, handleWalkEnd, playerPathIndex, playerTextureIndex
   return (
     <PlayerWC>
       <StyledPlayer
-        isWalking={playerPath && playerPathIndex < playerPath.length - 1}
-        direction={state.dir}
+        $isWalking={playerPath && playerPathIndex < playerPath.length - 1}
+        $direction={state.dir}
         onAnimationEnd={handleWalkEnd}
       >
-        {state.dir && texturePos && <StyledPlayerTexture texturePos={texturePos} />}
+        {state.dir && texturePos && <StyledPlayerTexture $texturePos={texturePos} />}
       </StyledPlayer>
     </PlayerWC>
   )

@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "author": "Max Proske <max@mproske.com>",
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
-    "eslint": "^8.13.0",
-    "eslint-config-next": "^12.1.5",
-    "eslint-config-prettier": "^8.5.0",
-    "prettier": "^2.6.2"
+    "eslint": "^9.22.0",
+    "eslint-config-next": "^15.2.2",
+    "eslint-config-prettier": "^10.1.1",
+    "prettier": "^3.5.3"
   }
 }

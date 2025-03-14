@@ -71,7 +71,7 @@ export const usePlayer = ({ map, emitPlayerPos }) => {
   )
 
   const handleWalkEnd = useCallback(() => {
-    if (playerPathIndex < playerPath.length) {
+    if (playerPathIndex < playerPath.length) {      
       const playerPathIndexUpdate = playerPathIndex + 1
       const nextPos = playerPath[playerPathIndexUpdate]
 

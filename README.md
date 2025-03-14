@@ -25,10 +25,10 @@ I'm making a game in React without `<canvas>` as a constraint, to improve my kno
 
 ```
 # Copy environment variables
-$ cp env/dev.env.sample env/dev
+$ cp env/dev.env.sample env/dev.env
 
 # Install dev dependencies for automatic code formatting
-$ yarn install
+$ pnpm install
 
 $ ./debug.sh
 ```

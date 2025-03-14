@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
-import styled, { keyframes, css } from 'styled-components'
+import styled, { css } from 'styled-components'
 import { useUser } from '../stores/UserProvider'
 
 import { updateDir } from '../stores/userActions'
@@ -10,48 +10,35 @@ const PlayerWC = dynamic(() => import('~/components/webcomponents/Player'), {
   ssr: false,
 })
 
-const walkAnimations = {
-  SE: keyframes`
-  0% {
-    left: 0%;
-  }
-  100% {
-    left: 100%;
-  }`,
-  NE: keyframes`
-  0% {
-    bottom: 0%;
-  }
-  100% {
-    bottom: 100%;
-  }`,
-  SW: keyframes`
-  0% {
-    bottom: 0%;
-  }
-  100% {
-    bottom: -100%;
-  }`,
-  NW: keyframes`
-  0% {
-    left: 0%;
-  }
-  100% {
-    left: -100%;
-  }`,
-}
-
 const StyledPlayer = styled.div`
   width: 43px;
   height: 70px;
-
   position: absolute;
 
-  ${({ isWalking, walkAnimation }) =>
-    isWalking &&
-    css`
-      animation: ${walkAnimation} 0.45s steps(3);
-    `}
+  @keyframes walkSE {
+    0% { left: 0%; }
+    100% { left: 100%; }
+  }
+
+  @keyframes walkNE {
+    0% { bottom: 0%; }
+    100% { bottom: 100%; }
+  }
+
+  @keyframes walkSW {
+    0% { bottom: 0%; }
+    100% { bottom: -100%; }
+  }
+
+  @keyframes walkNW {
+    0% { left: 0%; }
+    100% { left: -100%; }
+  }
+
+  ${({ isWalking, direction }) => isWalking && css`
+    animation: walk${direction} 0.45s steps(3);
+    animation-fill-mode: forwards;
+  `}
 `
 
 // TODO: Share styled component with Tile
@@ -114,7 +101,7 @@ export const Player = ({ pos, handleWalkEnd, playerPathIndex, playerTextureIndex
     <PlayerWC>
       <StyledPlayer
         isWalking={playerPath && playerPathIndex < playerPath.length - 1}
-        walkAnimation={walkAnimations[state.dir]}
+        direction={state.dir}
         onAnimationEnd={handleWalkEnd}
       >
         {state.dir && texturePos && <StyledPlayerTexture texturePos={texturePos} />}

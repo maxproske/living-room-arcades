@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes, css } from 'styled-components'
 
 export const Chat = ({ emitMessage, messages, socketId }) => {
   const [message, setMessage] = useState('')
@@ -58,14 +58,14 @@ const StyledWrapper = styled.div`
 `
 
 const chatAnimation = keyframes`
-0% {
-  opacity: 0;
-  top: 0.5rem;
-}
-100% {
-  opacity: 1;
-  top: 0;
-}
+  0% {
+    opacity: 0;
+    top: 0.5rem;
+  }
+  100% {
+    opacity: 1;
+    top: 0;
+  }
 `
 
 const StyledMessages = styled.div`
@@ -94,7 +94,7 @@ const StyledMessage = styled.article`
   min-height: 2.5rem;
 
   position: relative;
-  animation: ${chatAnimation} 0.6s;
+  animation: ${css`${chatAnimation} 0.6s`};
 
   p {
     margin: 0;

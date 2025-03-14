@@ -13,19 +13,19 @@
   },
   "dependencies": {
     "bresenham": "^0.0.4",
-    "next": "^12.1.6",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "socket.io": "^4.5.0",
-    "socket.io-client": "^4.5.0",
-    "styled-components": "^5.3.3",
-    "styled-normalize": "^8.0.7"
+    "next": "^15.2.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "styled-components": "^6.1.15",
+    "styled-normalize": "^8.1.1"
   },
   "devDependencies": {
-    "eslint": "^8.13.0",
-    "eslint-config-next": "^12.1.5",
-    "eslint-config-prettier": "^8.5.0",
-    "lint-staged": "^12.3.3",
-    "prettier": "^2.6.2"
+    "eslint": "^9.22.0",
+    "eslint-config-next": "^15.2.2",
+    "eslint-config-prettier": "^10.1.1",
+    "lint-staged": "^15.5.0",
+    "prettier": "^3.5.3"
   }
 }

@@ -107,7 +107,13 @@ export const Tile = memo(
 
         // Don't render self as an other player
         if (playerSocketId !== socketId && x === playerXPos && y === playerYPos) {
-          return <OtherPlayer key={`[otherPlayer][${playerSocketId}][${x},${y}]`} playerTextureIndex={playerTextureIndex} dir={dir} />
+          return (
+            <OtherPlayer
+              key={`[otherPlayer][${playerSocketId}][${x},${y}]`}
+              playerTextureIndex={playerTextureIndex}
+              dir={dir}
+            />
+          )
         }
       })
     }

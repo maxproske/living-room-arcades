@@ -8,16 +8,19 @@ import { Chat } from '~/components/Chat'
 
 // Custom hooks
 import { useInterval } from '../hooks/useInterval'
-
 import { useGameStatus } from '../hooks/useGameStatus'
 import { usePlayer } from '../hooks/usePlayer'
 import { useTiledMap } from '~/hooks/useTiledMap'
 import { useSocket } from '~/hooks/useSocket'
+import { useCamera } from '~/hooks/useCamera'
 
 const StyledGameWrapper = styled.div`
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
 `
 
 export const Game = () => {
@@ -32,6 +35,8 @@ export const Game = () => {
       map,
       emitPlayerPos,
     })
+
+  const cameraPosition = useCamera(player?.pos)
 
   const handleKeyDown = ({ keyCode }) => {}
 
@@ -100,6 +105,7 @@ export const Game = () => {
         playerPathIndex={playerPathIndex}
         playerPath={playerPath}
         socketId={socketId}
+        cameraPosition={cameraPosition}
       />
       {/* <ContextMenu outerRef={gameRef} /> */}
       <Chat socketId={socketId} messages={messages} emitMessage={emitMessage} />

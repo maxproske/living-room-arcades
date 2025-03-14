@@ -14,8 +14,10 @@ I'm making a game in React without `<canvas>` as a constraint, to improve my kno
 - [X] TypeScript
 - [X] Remove Typescript
 - [X] Chat using WebSockets
-- [X] Multiplayer with real-time player positions
+- [X] Multiplayer with real-time player positions and directions
 - [X] Dockerize app
+- [ ] Center camera around player
+- [ ] Animate other players
 - [ ] Deploy to Digital Ocean with CI/CD
 - [ ] Monster with fighting minigame
 - [ ] Harvestable node with harvesting minigame
